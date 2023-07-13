@@ -1,0 +1,40 @@
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Executables
+*.exe
+*.out
+
+# Cache and Temporary files
+*.cache
+*.log
+*.swp
+*~
+
+# Dependency directories (specific to Go)
+/bin
+/pkg
+/vendor
+
+# Compiled Go binaries
+*.test
+*.prof
+
+# Output directories (specific to Go)
+/dist
+/release
+
+# Environment-specific files
+.env
+.env.local
+.env.*.local
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
