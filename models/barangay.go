@@ -1,7 +1,7 @@
 package models
 
 type Barangay struct {
-	Id                int    `json:"id"`
+	Id                int    `json:"-"`
 	Code              string `json:"code"`
 	Name              string `json:"name"`
 	UrbanRural        string `json:"urban_rural"`

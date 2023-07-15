@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  app:
+    image: ph-locations:latest
+    container_name: ph-locations-app
+    restart: unless-stopped
+    tty: true
+    env_file:
+      - app.env.example
+    ports:
+      - "6945:6945"
+    networks:
+      - ph-locations-network
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 1G
+    volumes:
+      - ${GOCACHE}:/go/cache
+  postgresql:
+    image: postgres:15.3-alpine3.18
+    container_name: ph-locations-db
+    restart: unless-stopped
+    tty: true
+    environment:
+      POSTGRES_USER: ph_locations_user
+      POSTGRES_PASSWORD: wLdUgQ7kUwTZp65TRoEA
+      POSTGRES_DB: ph_locations_db
+#    env_file:
+#      - app.env.example
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    networks:
+      - ph-locations-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+volumes:
+  postgresql:
+    driver: local
+
+networks:
+  ph-locations-network:
+    driver: bridge
+    name: ph-locations-network

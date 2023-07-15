@@ -1,0 +1,43 @@
+FROM golang:1.20-alpine3.18 AS builder
+
+RUN /sbin/apk update && \
+	/sbin/apk --no-cache add ca-certificates git tzdata && \
+	/usr/sbin/update-ca-certificates
+
+RUN adduser -D -g '' ph_locations_user
+WORKDIR /home/ph_locations_user
+
+
+COPY go.mod /home/ph_locations_user
+COPY go.sum /home/ph_locations_user
+
+RUN go mod download
+
+COPY cmd    /home/ph_locations_user/cmd
+COPY handlers /home/ph_locations_user/handlers
+COPY models /home/ph_locations_user/models
+COPY postgresql /home/ph_locations_user/postgresql
+COPY stores /home/ph_locations_user/stores
+
+COPY . .
+
+ARG VERSION
+
+ENV CGO_ENABLED=0
+ENV DOCKER_BUILDKIT=1
+
+RUN go build -a -tags netgo,osusergo -buildvcs=false \
+    -ldflags "-extldflags '-static' -s -w" \
+    -ldflags "-X main.version=$VERSION" -o ph_locations_app ./cmd/ph-locations
+
+FROM busybox:musl
+
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /home/ph_locations_user/ph_locations_app /home/ph_locations_user
+
+USER ph_locations_user
+WORKDIR /home
+
+ENTRYPOINT ["/home/ph_locations_user"]

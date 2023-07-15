@@ -38,3 +38,6 @@
 # Miscellaneous
 .DS_Store
 Thumbs.db
+
+# ENV variables
+build/*.env

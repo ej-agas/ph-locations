@@ -3,6 +3,7 @@ package postgresql
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 )
 
 type Config struct {
@@ -16,7 +17,7 @@ type Config struct {
 func NewConnection(config Config) (*sql.DB, error) {
 	connectionString := fmt.Sprintf(
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		config.Host, config.Port, config.Password, config.DatabaseName)
+		config.Host, config.Port, config.User, config.Password, config.DatabaseName)
 
 	db, err := sql.Open("postgres", connectionString)
 

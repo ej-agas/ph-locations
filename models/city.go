@@ -1,7 +1,7 @@
 package models
 
 type City struct {
-	Id          int    `json:"id"`
+	Id          int    `json:"-"`
 	Code        string `json:"code"`
 	Name        string `json:"name"`
 	CityClass   string `json:"city_class"`

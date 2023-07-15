@@ -1,7 +1,7 @@
 package models
 
 type Municipality struct {
-	Id          int    `json:"id"`
+	Id          int    `json:"-"`
 	Code        string `json:"code"`
 	Name        string `json:"name"`
 	IncomeClass string `json:"income_class"`
