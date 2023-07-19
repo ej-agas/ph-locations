@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/ej-agas/ph-locations/stores"
 	"github.com/gorilla/mux"
 	"net/http"
-	"ph-locations/stores"
 )
 
 type RegionHandler struct {

@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/ej-agas/ph-locations/handlers"
+	"github.com/ej-agas/ph-locations/postgresql"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"os"
-	"ph-locations/handlers"
-	"ph-locations/postgresql"
 	"strconv"
 )
 

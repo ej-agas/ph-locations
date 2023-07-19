@@ -1,4 +1,4 @@
-module ph-locations
+module github.com/ej-agas/ph-locations
 
 go 1.20
 

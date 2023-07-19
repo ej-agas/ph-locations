@@ -2,7 +2,7 @@ package stores
 
 import (
 	"context"
-	"ph-locations/models"
+	"github.com/ej-agas/ph-locations/models"
 )
 
 type RegionStore interface {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"ph-locations/models"
+	"github.com/ej-agas/ph-locations/models"
 )
 
 type RegionStore struct {
