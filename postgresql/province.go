@@ -16,7 +16,7 @@ func NewProvinceStore(connection *sql.DB) *ProvinceStore {
 }
 
 func (store ProvinceStore) Save(ctx context.Context, province models.Province) error {
-	stmt, err := store.connection.PrepareContext(ctx, "INSERT INTO provinces (code, name, income_class, population, region_id) VALUES ($1, $2, $3)")
+	stmt, err := store.connection.PrepareContext(ctx, "INSERT INTO provinces (code, name, income_class, population, region_id) VALUES ($1, $2, $3, $4, $5)")
 
 	if err != nil {
 		return fmt.Errorf("error connecting to postgresql: %s", err)
