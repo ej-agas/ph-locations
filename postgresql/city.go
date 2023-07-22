@@ -93,6 +93,7 @@ func newCity(row *sql.Row) (models.City, error) {
 		&city.Id,
 		&city.Code,
 		&city.Name,
+		&city.CityClass,
 		&city.IncomeClass,
 		&city.Population,
 		&city.ProvinceId,
