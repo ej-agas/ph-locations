@@ -43,7 +43,13 @@ func (store SubMunicipalityStore) Find(id int) (models.SubMunicipality, error) {
 	var subMunicipality models.SubMunicipality
 
 	row := store.db.QueryRow("SELECT * FROM sub_municipalities WHERE id = $1", id)
-	err := row.Scan(&subMunicipality.Id, &subMunicipality.Code, &subMunicipality.Name, &subMunicipality.Population)
+	err := row.Scan(
+		&subMunicipality.Id,
+		&subMunicipality.Code,
+		&subMunicipality.Name,
+		&subMunicipality.Population,
+		&subMunicipality.CityId,
+	)
 
 	if err == nil {
 		return subMunicipality, nil
@@ -60,7 +66,13 @@ func (store SubMunicipalityStore) FindByCode(code string) (models.SubMunicipalit
 	var subMunicipality models.SubMunicipality
 
 	row := store.db.QueryRow("SELECT * FROM sub_municipalities WHERE code = $1", code)
-	err := row.Scan(&subMunicipality.Id, &subMunicipality.Code, &subMunicipality.Name, &subMunicipality.Population)
+	err := row.Scan(
+		&subMunicipality.Id,
+		&subMunicipality.Code,
+		&subMunicipality.Name,
+		&subMunicipality.Population,
+		&subMunicipality.CityId,
+	)
 
 	if err == nil {
 		return subMunicipality, nil
@@ -77,7 +89,13 @@ func (store SubMunicipalityStore) FindByName(name string) (models.SubMunicipalit
 	var subMunicipality models.SubMunicipality
 
 	row := store.db.QueryRow("SELECT * FROM sub_municipalities WHERE name = $1", name)
-	err := row.Scan(&subMunicipality.Id, &subMunicipality.Code, &subMunicipality.Name, &subMunicipality.Population)
+	err := row.Scan(
+		&subMunicipality.Id,
+		&subMunicipality.Code,
+		&subMunicipality.Name,
+		&subMunicipality.Population,
+		&subMunicipality.CityId,
+	)
 
 	if err == nil {
 		return subMunicipality, nil
