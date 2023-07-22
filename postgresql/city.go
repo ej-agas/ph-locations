@@ -18,7 +18,7 @@ func NewCityStore(db *sql.DB) *CityStore {
 func (store CityStore) Save(ctx context.Context, city models.City) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,
-		"INSERT INTO cities (code, name, income_class, population, province_id, district_id) VALUES ($1, $2, $3, $4, $5, $6)",
+		"INSERT INTO cities (code, name, city_class, income_class, population, province_id, district_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
 	)
 
 	if err != nil {
@@ -30,12 +30,13 @@ func (store CityStore) Save(ctx context.Context, city models.City) error {
 	if _, err := stmt.Exec(
 		city.Code,
 		city.Name,
+		city.CityClass,
 		city.IncomeClass,
 		city.Population,
 		city.ProvinceId,
 		city.DistrictId,
 	); err != nil {
-		return fmt.Errorf("error executing query: %s", err)
+		return fmt.Errorf("error executing query: %w", err)
 	}
 
 	return nil
@@ -50,10 +51,10 @@ func (store CityStore) Find(id int) (models.City, error) {
 	}
 
 	if err == sql.ErrNoRows {
-		return city, fmt.Errorf("city with id = %d not found: %s", id, err)
+		return city, fmt.Errorf("city with id = %d not found: %w", id, err)
 	}
 
-	return city, fmt.Errorf("error executing query: %s", err)
+	return city, fmt.Errorf("error executing query: %w", err)
 }
 
 func (store CityStore) FindByCode(code string) (models.City, error) {
@@ -65,10 +66,10 @@ func (store CityStore) FindByCode(code string) (models.City, error) {
 	}
 
 	if err == sql.ErrNoRows {
-		return city, fmt.Errorf("city with code = %s not found: %s", code, err)
+		return city, fmt.Errorf("city with code = %s not found: %w", code, err)
 	}
 
-	return city, fmt.Errorf("error executing query: %s", err)
+	return city, fmt.Errorf("error executing query: %w", err)
 }
 
 func (store CityStore) FindByName(name string) (models.City, error) {
@@ -80,10 +81,10 @@ func (store CityStore) FindByName(name string) (models.City, error) {
 	}
 
 	if err == sql.ErrNoRows {
-		return city, fmt.Errorf("city with name = %s not found: %s", name, err)
+		return city, fmt.Errorf("city with name = %s not found: %w", name, err)
 	}
 
-	return city, fmt.Errorf("error executing query: %s", err)
+	return city, fmt.Errorf("error executing query: %w", err)
 }
 
 func newCity(row *sql.Row) (models.City, error) {
