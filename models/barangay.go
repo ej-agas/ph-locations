@@ -6,7 +6,7 @@ type Barangay struct {
 	Name              string `json:"name"`
 	UrbanRural        string `json:"urban_rural"`
 	Population        int    `json:"population"`
-	CityId            int    `json:"city_id,omitempty"`
-	MunicipalityId    int    `json:"municipality_id,omitempty"`
-	SubMunicipalityId int    `json:"sub_municipality_id,omitempty"`
+	CityId            *int   `json:"city_id,omitempty"`
+	MunicipalityId    *int   `json:"municipality_id,omitempty"`
+	SubMunicipalityId *int   `json:"sub_municipality_id,omitempty"`
 }

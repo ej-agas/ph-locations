@@ -5,5 +5,5 @@ type SubMunicipality struct {
 	Code       string `json:"code"`
 	Name       string `json:"name"`
 	Population int    `json:"population"`
-	CityId     int    `json:"city_id"`
+	CityId     *int   `json:"city_id"`
 }

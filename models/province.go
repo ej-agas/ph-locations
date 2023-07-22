@@ -6,5 +6,5 @@ type Province struct {
 	Name        string `json:"name"`
 	IncomeClass string `json:"income_class"`
 	Population  int    `json:"population"`
-	RegionId    int    `json:"region_id"`
+	RegionId    *int   `json:"region_id"`
 }

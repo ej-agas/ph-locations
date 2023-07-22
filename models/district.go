@@ -5,5 +5,5 @@ type District struct {
 	Code       string `json:"code"`
 	Name       string `json:"name"`
 	Population int    `json:"population"`
-	RegionId   int    `json:"region_id"`
+	RegionId   *int   `json:"region_id"`
 }
