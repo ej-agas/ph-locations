@@ -8,15 +8,15 @@ import (
 )
 
 type RegionStore struct {
-	connection *sql.DB
+	db *sql.DB
 }
 
 func NewRegionStore(connection *sql.DB) *RegionStore {
-	return &RegionStore{connection: connection}
+	return &RegionStore{db: connection}
 }
 
 func (store RegionStore) Save(ctx context.Context, region models.Region) error {
-	stmt, err := store.connection.PrepareContext(ctx, "INSERT INTO regions (code, name, population) VALUES ($1, $2, $3)")
+	stmt, err := store.db.PrepareContext(ctx, "INSERT INTO regions (code, name, population) VALUES ($1, $2, $3)")
 
 	if err != nil {
 		return fmt.Errorf("error connecting to postgresql: %s", err)
@@ -34,7 +34,7 @@ func (store RegionStore) Save(ctx context.Context, region models.Region) error {
 func (store RegionStore) Find(id int) (models.Region, error) {
 	var region models.Region
 
-	row := store.connection.QueryRow("SELECT * FROM regions WHERE id = $1", id)
+	row := store.db.QueryRow("SELECT * FROM regions WHERE id = $1", id)
 	err := row.Scan(&region.Id, &region.Code, &region.Name, &region.Population)
 
 	if err == nil {
@@ -51,7 +51,7 @@ func (store RegionStore) Find(id int) (models.Region, error) {
 func (store RegionStore) FindByCode(code string) (models.Region, error) {
 	var region models.Region
 
-	row := store.connection.QueryRow("SELECT * FROM regions WHERE code = $1", code)
+	row := store.db.QueryRow("SELECT * FROM regions WHERE code = $1", code)
 	err := row.Scan(&region.Id, &region.Code, &region.Name, &region.Population)
 
 	if err == nil {
@@ -68,7 +68,7 @@ func (store RegionStore) FindByCode(code string) (models.Region, error) {
 func (store RegionStore) FindByName(name string) (models.Region, error) {
 	var region models.Region
 
-	row := store.connection.QueryRow("SELECT * FROM regions WHERE name = $1", name)
+	row := store.db.QueryRow("SELECT * FROM regions WHERE name = $1", name)
 	err := row.Scan(&region.Id, &region.Code, &region.Name, &region.Population)
 
 	if err == nil {
@@ -85,7 +85,7 @@ func (store RegionStore) FindByName(name string) (models.Region, error) {
 func (store RegionStore) All() ([]models.Region, error) {
 	regions := make([]models.Region, 0)
 
-	rows, err := store.connection.Query("SELECT * FROM regions")
+	rows, err := store.db.Query("SELECT * FROM regions")
 
 	if err == sql.ErrNoRows {
 		return regions, nil

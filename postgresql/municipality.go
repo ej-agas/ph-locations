@@ -8,11 +8,15 @@ import (
 )
 
 type MunicipalityStore struct {
-	connection *sql.DB
+	db *sql.DB
+}
+
+func NewMunicipalityStore(connection *sql.DB) *MunicipalityStore {
+	return &MunicipalityStore{db: connection}
 }
 
 func (store MunicipalityStore) Save(ctx context.Context, municipality models.Municipality) error {
-	stmt, err := store.connection.PrepareContext(
+	stmt, err := store.db.PrepareContext(
 		ctx,
 		"INSERT INTO municipalities (code, name, income_class, population, province_id, district_id) VALUES ($1, $2, $3, $4, $5, $6)",
 	)
@@ -38,7 +42,7 @@ func (store MunicipalityStore) Save(ctx context.Context, municipality models.Mun
 }
 
 func (store MunicipalityStore) Find(id int) (models.Municipality, error) {
-	row := store.connection.QueryRow("SELECT * FROM municipalities WHERE municipalities.id = $1", id)
+	row := store.db.QueryRow("SELECT * FROM municipalities WHERE municipalities.id = $1", id)
 	municipality, err := newMunicipality(row)
 
 	if err == nil {
@@ -53,7 +57,7 @@ func (store MunicipalityStore) Find(id int) (models.Municipality, error) {
 }
 
 func (store MunicipalityStore) FindByCode(code string) (models.Municipality, error) {
-	row := store.connection.QueryRow("SELECT * FROM municipalities WHERE code = $1", code)
+	row := store.db.QueryRow("SELECT * FROM municipalities WHERE code = $1", code)
 	municipality, err := newMunicipality(row)
 
 	if err == nil {
@@ -68,7 +72,7 @@ func (store MunicipalityStore) FindByCode(code string) (models.Municipality, err
 }
 
 func (store MunicipalityStore) FindByName(name string) (models.Municipality, error) {
-	row := store.connection.QueryRow("SELECT * FROM municipalities WHERE name = $1", name)
+	row := store.db.QueryRow("SELECT * FROM municipalities WHERE name = $1", name)
 	municipality, err := newMunicipality(row)
 
 	if err == nil {

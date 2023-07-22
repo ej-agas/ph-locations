@@ -11,10 +11,14 @@ type CityStore struct {
 	db *sql.DB
 }
 
+func NewCityStore(db *sql.DB) *CityStore {
+	return &CityStore{db: db}
+}
+
 func (store CityStore) Save(ctx context.Context, city models.City) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,
-		"INSERT INTO municipalities (code, name, income_class, population, province_id, district_id) VALUES ($1, $2, $3, $4, $5, $6)",
+		"INSERT INTO cities (code, name, income_class, population, province_id, district_id) VALUES ($1, $2, $3, $4, $5, $6)",
 	)
 
 	if err != nil {

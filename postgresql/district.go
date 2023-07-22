@@ -11,6 +11,10 @@ type DistrictStore struct {
 	db *sql.DB
 }
 
+func NewDistrictStore(connection *sql.DB) *DistrictStore {
+	return &DistrictStore{db: connection}
+}
+
 func (store DistrictStore) Save(ctx context.Context, district models.District) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,

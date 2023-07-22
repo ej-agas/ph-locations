@@ -11,6 +11,10 @@ type SubMunicipalityStore struct {
 	db *sql.DB
 }
 
+func NewSubMunicipalityStore(db *sql.DB) *SubMunicipalityStore {
+	return &SubMunicipalityStore{db: db}
+}
+
 func (store SubMunicipalityStore) Save(ctx context.Context, subMunicipality models.SubMunicipality) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,

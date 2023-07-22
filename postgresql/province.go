@@ -8,15 +8,15 @@ import (
 )
 
 type ProvinceStore struct {
-	connection *sql.DB
+	db *sql.DB
 }
 
 func NewProvinceStore(connection *sql.DB) *ProvinceStore {
-	return &ProvinceStore{connection: connection}
+	return &ProvinceStore{db: connection}
 }
 
 func (store ProvinceStore) Save(ctx context.Context, province models.Province) error {
-	stmt, err := store.connection.PrepareContext(ctx, "INSERT INTO provinces (code, name, income_class, population, region_id) VALUES ($1, $2, $3, $4, $5)")
+	stmt, err := store.db.PrepareContext(ctx, "INSERT INTO provinces (code, name, income_class, population, region_id) VALUES ($1, $2, $3, $4, $5)")
 
 	if err != nil {
 		return fmt.Errorf("error connecting to postgresql: %s", err)
@@ -34,7 +34,7 @@ func (store ProvinceStore) Save(ctx context.Context, province models.Province) e
 func (store ProvinceStore) Find(id int) (models.Province, error) {
 	var province models.Province
 
-	row := store.connection.QueryRow("SELECT * FROM provinces WHERE id = $1", id)
+	row := store.db.QueryRow("SELECT * FROM provinces WHERE id = $1", id)
 	err := row.Scan(&province.Id, &province.Code, &province.Name, &province.IncomeClass, &province.Population, &province.RegionId)
 
 	if err == nil {
@@ -51,7 +51,7 @@ func (store ProvinceStore) Find(id int) (models.Province, error) {
 func (store ProvinceStore) FindByCode(ctx context.Context, code string) (models.Province, error) {
 	var province models.Province
 
-	row := store.connection.QueryRow("SELECT * FROM provinces WHERE code = $1", code)
+	row := store.db.QueryRow("SELECT * FROM provinces WHERE code = $1", code)
 	err := row.Scan(&province.Id, &province.Code, &province.Name, &province.IncomeClass, &province.Population, &province.RegionId)
 
 	if err == nil {
@@ -68,7 +68,7 @@ func (store ProvinceStore) FindByCode(ctx context.Context, code string) (models.
 func (store ProvinceStore) FindByName(ctx context.Context, name string) (models.Province, error) {
 	var province models.Province
 
-	row := store.connection.QueryRow("SELECT * FROM provinces WHERE name = $1", name)
+	row := store.db.QueryRow("SELECT * FROM provinces WHERE name = $1", name)
 	err := row.Scan(&province.Id, &province.Code, &province.Name, &province.IncomeClass, &province.Population, &province.RegionId)
 
 	if err == nil {
