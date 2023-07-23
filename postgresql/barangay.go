@@ -18,7 +18,7 @@ func NewBarangayStore(db *sql.DB) *BarangayStore {
 func (store BarangayStore) Save(ctx context.Context, barangay models.Barangay) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,
-		"INSERT INTO barangays (code, name, urban_rural, population, city_id, municipality_id, sub_municipality_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+		"INSERT INTO barangays (code, name, urban_rural, population, city_id, municipality_id, sub_municipality_id, special_government_unit_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
 	)
 
 	if err != nil {
@@ -35,6 +35,7 @@ func (store BarangayStore) Save(ctx context.Context, barangay models.Barangay) e
 		barangay.CityId,
 		barangay.MunicipalityId,
 		barangay.SubMunicipalityId,
+		barangay.SpecialGovernmentUnitId,
 	); err != nil {
 		return fmt.Errorf("error executing query: %w", err)
 	}
@@ -99,6 +100,7 @@ func newBarangay(row *sql.Row) (models.Barangay, error) {
 		&barangay.CityId,
 		&barangay.MunicipalityId,
 		&barangay.SubMunicipalityId,
+		&barangay.SpecialGovernmentUnitId,
 	)
 
 	return barangay, err
