@@ -42,10 +42,10 @@ func (store RegionStore) Find(id int) (models.Region, error) {
 	}
 
 	if err == sql.ErrNoRows {
-		return region, fmt.Errorf("region with id = %d not found: %s", id, err)
+		return region, fmt.Errorf("region with id = %d not found: %w", id, err)
 	}
 
-	return region, fmt.Errorf("error executing query: %s", err)
+	return region, fmt.Errorf("error executing query: %w", err)
 }
 
 func (store RegionStore) FindByCode(code string) (models.Region, error) {

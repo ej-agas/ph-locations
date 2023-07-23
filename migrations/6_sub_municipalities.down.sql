@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS municipalities;
+DROP TABLE IF EXISTS sub_municipalities;
