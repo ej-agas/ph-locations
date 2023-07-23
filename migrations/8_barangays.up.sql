@@ -6,7 +6,8 @@ CREATE TABLE barangays (
     population BIGINT NOT NULL,
     city_id INTEGER,
     municipality_id INTEGER,
-    sub_municipality_id INTEGER
+    sub_municipality_id INTEGER,
+    special_government_unit_id INTEGER
 );
 
 CREATE UNIQUE INDEX barangays_code__idx ON barangays (code);
@@ -26,3 +27,8 @@ ALTER TABLE barangays
 ADD CONSTRAINT fk_barangays_sub_municipalities
 FOREIGN KEY (sub_municipality_id)
 REFERENCES sub_municipalities (id);
+
+ALTER TABLE barangays
+ADD CONSTRAINT fk_barangays_special_government_units
+FOREIGN KEY (special_government_unit_id)
+REFERENCES special_government_units (id);
