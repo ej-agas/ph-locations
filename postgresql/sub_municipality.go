@@ -18,7 +18,7 @@ func NewSubMunicipalityStore(db *sql.DB) *SubMunicipalityStore {
 func (store SubMunicipalityStore) Save(ctx context.Context, subMunicipality models.SubMunicipality) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,
-		"INSERT INTO sub_municipalities (code, name, population, city_id) VALUES ($1, $2, $3, $4)",
+		"INSERT INTO sub_municipalities (code, name, population, city_code) VALUES ($1, $2, $3, $4)",
 	)
 
 	if err != nil {
@@ -31,7 +31,7 @@ func (store SubMunicipalityStore) Save(ctx context.Context, subMunicipality mode
 		subMunicipality.Code,
 		subMunicipality.Name,
 		subMunicipality.Population,
-		subMunicipality.CityId,
+		subMunicipality.CityCode,
 	); err != nil {
 		return fmt.Errorf("error executing query: %w", err)
 	}
@@ -40,16 +40,8 @@ func (store SubMunicipalityStore) Save(ctx context.Context, subMunicipality mode
 }
 
 func (store SubMunicipalityStore) Find(id int) (models.SubMunicipality, error) {
-	var subMunicipality models.SubMunicipality
-
 	row := store.db.QueryRow("SELECT * FROM sub_municipalities WHERE id = $1", id)
-	err := row.Scan(
-		&subMunicipality.Id,
-		&subMunicipality.Code,
-		&subMunicipality.Name,
-		&subMunicipality.Population,
-		&subMunicipality.CityId,
-	)
+	subMunicipality, err := newSubMunicipality(row)
 
 	if err == nil {
 		return subMunicipality, nil
@@ -63,16 +55,8 @@ func (store SubMunicipalityStore) Find(id int) (models.SubMunicipality, error) {
 }
 
 func (store SubMunicipalityStore) FindByCode(code string) (models.SubMunicipality, error) {
-	var subMunicipality models.SubMunicipality
-
 	row := store.db.QueryRow("SELECT * FROM sub_municipalities WHERE code = $1", code)
-	err := row.Scan(
-		&subMunicipality.Id,
-		&subMunicipality.Code,
-		&subMunicipality.Name,
-		&subMunicipality.Population,
-		&subMunicipality.CityId,
-	)
+	subMunicipality, err := newSubMunicipality(row)
 
 	if err == nil {
 		return subMunicipality, nil
@@ -86,16 +70,8 @@ func (store SubMunicipalityStore) FindByCode(code string) (models.SubMunicipalit
 }
 
 func (store SubMunicipalityStore) FindByName(name string) (models.SubMunicipality, error) {
-	var subMunicipality models.SubMunicipality
-
 	row := store.db.QueryRow("SELECT * FROM sub_municipalities WHERE name = $1", name)
-	err := row.Scan(
-		&subMunicipality.Id,
-		&subMunicipality.Code,
-		&subMunicipality.Name,
-		&subMunicipality.Population,
-		&subMunicipality.CityId,
-	)
+	subMunicipality, err := newSubMunicipality(row)
 
 	if err == nil {
 		return subMunicipality, nil
@@ -106,4 +82,18 @@ func (store SubMunicipalityStore) FindByName(name string) (models.SubMunicipalit
 	}
 
 	return subMunicipality, fmt.Errorf("error executing query: %w", err)
+}
+
+func newSubMunicipality(row *sql.Row) (models.SubMunicipality, error) {
+	var subMun models.SubMunicipality
+
+	err := row.Scan(
+		&subMun.Id,
+		&subMun.Code,
+		&subMun.Name,
+		&subMun.Population,
+		&subMun.CityCode,
+	)
+
+	return subMun, err
 }

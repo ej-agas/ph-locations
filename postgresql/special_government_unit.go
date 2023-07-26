@@ -18,7 +18,7 @@ func NewSpecialGovernmentUnit(db *sql.DB) *SpecialGovernmentUnit {
 func (store SpecialGovernmentUnit) Save(ctx context.Context, sgu models.SpecialGovernmentUnit) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,
-		"INSERT INTO special_government_units (code, name, province_id) VALUES ($1, $2, $3)",
+		"INSERT INTO special_government_units (code, name, province_code) VALUES ($1, $2, $3)",
 	)
 
 	if err != nil {
@@ -27,7 +27,7 @@ func (store SpecialGovernmentUnit) Save(ctx context.Context, sgu models.SpecialG
 
 	defer stmt.Close()
 
-	if _, err := stmt.Exec(sgu.Code, sgu.Name, sgu.ProvinceId); err != nil {
+	if _, err := stmt.Exec(sgu.Code, sgu.Name, sgu.ProvinceCode); err != nil {
 		return fmt.Errorf("error executing query: %w", err)
 	}
 
@@ -35,10 +35,8 @@ func (store SpecialGovernmentUnit) Save(ctx context.Context, sgu models.SpecialG
 }
 
 func (store SpecialGovernmentUnit) Find(id int) (models.SpecialGovernmentUnit, error) {
-	var sgu models.SpecialGovernmentUnit
-
 	row := store.db.QueryRow("SELECT * FROM special_government_units WHERE id = $1", id)
-	err := row.Scan(&sgu.Id, &sgu.Code, &sgu.Name, &sgu.ProvinceId)
+	sgu, err := newSpecialGovernmentUnit(row)
 
 	if err == nil {
 		return sgu, nil
@@ -52,10 +50,8 @@ func (store SpecialGovernmentUnit) Find(id int) (models.SpecialGovernmentUnit, e
 }
 
 func (store SpecialGovernmentUnit) FindByCode(code string) (models.SpecialGovernmentUnit, error) {
-	var sgu models.SpecialGovernmentUnit
-
 	row := store.db.QueryRow("SELECT * FROM special_government_units WHERE code = $1", code)
-	err := row.Scan(&sgu.Id, &sgu.Code, &sgu.Name, &sgu.ProvinceId)
+	sgu, err := newSpecialGovernmentUnit(row)
 
 	if err == nil {
 		return sgu, nil
@@ -69,10 +65,8 @@ func (store SpecialGovernmentUnit) FindByCode(code string) (models.SpecialGovern
 }
 
 func (store SpecialGovernmentUnit) FindByName(name string) (models.SpecialGovernmentUnit, error) {
-	var sgu models.SpecialGovernmentUnit
-
 	row := store.db.QueryRow("SELECT * FROM special_government_units WHERE name = $1", name)
-	err := row.Scan(&sgu.Id, &sgu.Code, &sgu.Name, &sgu.ProvinceId)
+	sgu, err := newSpecialGovernmentUnit(row)
 
 	if err == nil {
 		return sgu, nil
@@ -83,4 +77,12 @@ func (store SpecialGovernmentUnit) FindByName(name string) (models.SpecialGovern
 	}
 
 	return sgu, fmt.Errorf("error executing query: %w", err)
+}
+
+func newSpecialGovernmentUnit(row *sql.Row) (models.SpecialGovernmentUnit, error) {
+	var sgu models.SpecialGovernmentUnit
+
+	err := row.Scan(&sgu.Id, &sgu.Code, &sgu.Name, &sgu.ProvinceCode)
+
+	return sgu, err
 }

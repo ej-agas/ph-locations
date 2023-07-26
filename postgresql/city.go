@@ -18,7 +18,7 @@ func NewCityStore(db *sql.DB) *CityStore {
 func (store CityStore) Save(ctx context.Context, city models.City) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,
-		"INSERT INTO cities (code, name, city_class, income_class, population, province_id, district_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+		"INSERT INTO cities (code, name, city_class, income_class, population, province_code, district_code) VALUES ($1, $2, $3, $4, $5, $6, $7)",
 	)
 
 	if err != nil {
@@ -33,8 +33,8 @@ func (store CityStore) Save(ctx context.Context, city models.City) error {
 		city.CityClass,
 		city.IncomeClass,
 		city.Population,
-		city.ProvinceId,
-		city.DistrictId,
+		city.ProvinceCode,
+		city.DistrictCode,
 	); err != nil {
 		return fmt.Errorf("error executing query: %w", err)
 	}
@@ -97,8 +97,8 @@ func newCity(row *sql.Row) (models.City, error) {
 		&city.CityClass,
 		&city.IncomeClass,
 		&city.Population,
-		&city.ProvinceId,
-		&city.DistrictId,
+		&city.ProvinceCode,
+		&city.DistrictCode,
 	)
 
 	if err != nil {

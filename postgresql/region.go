@@ -32,10 +32,8 @@ func (store RegionStore) Save(ctx context.Context, region models.Region) error {
 }
 
 func (store RegionStore) Find(id int) (models.Region, error) {
-	var region models.Region
-
 	row := store.db.QueryRow("SELECT * FROM regions WHERE id = $1", id)
-	err := row.Scan(&region.Id, &region.Code, &region.Name, &region.Population)
+	region, err := newRegion(row)
 
 	if err == nil {
 		return region, nil
@@ -49,10 +47,8 @@ func (store RegionStore) Find(id int) (models.Region, error) {
 }
 
 func (store RegionStore) FindByCode(code string) (models.Region, error) {
-	var region models.Region
-
 	row := store.db.QueryRow("SELECT * FROM regions WHERE code = $1", code)
-	err := row.Scan(&region.Id, &region.Code, &region.Name, &region.Population)
+	region, err := newRegion(row)
 
 	if err == nil {
 		return region, nil
@@ -66,10 +62,8 @@ func (store RegionStore) FindByCode(code string) (models.Region, error) {
 }
 
 func (store RegionStore) FindByName(name string) (models.Region, error) {
-	var region models.Region
-
 	row := store.db.QueryRow("SELECT * FROM regions WHERE name = $1", name)
-	err := row.Scan(&region.Id, &region.Code, &region.Name, &region.Population)
+	region, err := newRegion(row)
 
 	if err == nil {
 		return region, nil
@@ -104,4 +98,12 @@ func (store RegionStore) All() ([]models.Region, error) {
 	}
 
 	return regions, nil
+}
+
+func newRegion(row *sql.Row) (models.Region, error) {
+	var region models.Region
+
+	err := row.Scan(&region.Id, &region.Code, &region.Name, &region.Population)
+
+	return region, err
 }

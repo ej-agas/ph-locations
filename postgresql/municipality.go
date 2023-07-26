@@ -18,7 +18,7 @@ func NewMunicipalityStore(connection *sql.DB) *MunicipalityStore {
 func (store MunicipalityStore) Save(ctx context.Context, municipality models.Municipality) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,
-		"INSERT INTO municipalities (code, name, income_class, population, province_id, district_id) VALUES ($1, $2, $3, $4, $5, $6)",
+		"INSERT INTO municipalities (code, name, income_class, population, province_code, district_code) VALUES ($1, $2, $3, $4, $5, $6)",
 	)
 
 	if err != nil {
@@ -32,8 +32,8 @@ func (store MunicipalityStore) Save(ctx context.Context, municipality models.Mun
 		municipality.Name,
 		municipality.IncomeClass,
 		municipality.Population,
-		municipality.ProvinceId,
-		municipality.DistrictId,
+		municipality.ProvinceCode,
+		municipality.DistrictCode,
 	); err != nil {
 		return fmt.Errorf("error executing query: %s", err)
 	}
@@ -95,8 +95,8 @@ func newMunicipality(row *sql.Row) (models.Municipality, error) {
 		&municipality.Name,
 		&municipality.IncomeClass,
 		&municipality.Population,
-		&municipality.ProvinceId,
-		&municipality.DistrictId,
+		&municipality.ProvinceCode,
+		&municipality.DistrictCode,
 	)
 
 	if err != nil {

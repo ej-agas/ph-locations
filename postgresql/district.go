@@ -18,14 +18,14 @@ func NewDistrictStore(connection *sql.DB) *DistrictStore {
 func (store DistrictStore) Save(ctx context.Context, district models.District) error {
 	stmt, err := store.db.PrepareContext(
 		ctx,
-		"INSERT INTO districts (code, name, population, region_id) VALUES ($1, $2, $3, $4)",
+		"INSERT INTO districts (code, name, population, region_code) VALUES ($1, $2, $3, $4)",
 	)
 
 	if err != nil {
 		return fmt.Errorf("error creating prepared statement: %w", err)
 	}
 
-	if _, err := stmt.Exec(district.Code, district.Name, district.Population, district.RegionId); err != nil {
+	if _, err := stmt.Exec(district.Code, district.Name, district.Population, district.RegionCode); err != nil {
 		return fmt.Errorf("error saving district: %w", err)
 	}
 
@@ -85,7 +85,7 @@ func newDistrict(row *sql.Row) (models.District, error) {
 		&district.Code,
 		&district.Name,
 		&district.Population,
-		&district.RegionId,
+		&district.RegionCode,
 	)
 
 	return district, err
