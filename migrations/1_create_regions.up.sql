@@ -1,7 +1,7 @@
 CREATE TABLE regions (
      id SERIAL PRIMARY KEY,
-     code VARCHAR(255) NOT NULL,
-     name VARCHAR(255) NOT NULL,
+     code TEXT NOT NULL,
+     name TEXT NOT NULL,
      population BIGINT NOT NULL
 );
 
