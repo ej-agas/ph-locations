@@ -10,6 +10,10 @@ type ResponseMessage struct {
 	Message    string `json:"message"`
 }
 
+func (r ResponseMessage) Error() string {
+	return r.Message
+}
+
 func JSONResponse(w http.ResponseWriter, data interface{}, statusCode int) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(statusCode)

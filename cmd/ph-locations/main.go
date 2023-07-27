@@ -43,8 +43,11 @@ func main() {
 	router.HandleFunc("/", handlers.Home)
 	v1Router := router.PathPrefix("/api/v1/").Subrouter()
 	v1Router.HandleFunc("/provinces/{id}", provinceHandler.ShowProvinceById)
+	v1Router.HandleFunc("/provinces/{code}", provinceHandler.ShowProvinceById)
+
 	v1Router.HandleFunc("/regions", regionHandler.ListRegions)
 	v1Router.HandleFunc("/regions/{code}", regionHandler.ShowRegionByCode)
+	v1Router.HandleFunc("/regions/{code}/provinces", provinceHandler.ListByRegionId)
 
 	log.Fatal(http.ListenAndServe(":6945", router))
 }

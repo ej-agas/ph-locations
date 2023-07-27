@@ -3,8 +3,15 @@ package postgresql
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/ej-agas/ph-locations/models"
+	"github.com/ej-agas/ph-locations/stores"
+	"math"
+)
+
+var (
+	ErrInvalidCursor = errors.New("invalid cursor")
 )
 
 type ProvinceStore struct {
@@ -74,6 +81,63 @@ func (store ProvinceStore) FindByName(ctx context.Context, name string) (models.
 	}
 
 	return province, fmt.Errorf("error executing query: %s", err)
+}
+
+func (store ProvinceStore) FindByRegionCode(code string, opts stores.SearchOpts) (stores.Collection[models.Province], error) {
+	provinces := make([]models.Province, 0, opts.Limit)
+	collection := stores.Collection[models.Province]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from provinces WHERE region_code = $1", code).Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM provinces WHERE region_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
+		code,
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	for rows.Next() {
+		var province models.Province
+
+		if err := rows.Scan(
+			&province.Id,
+			&province.Code,
+			&province.Name,
+			&province.IncomeClass,
+			&province.Population,
+			&province.RegionCode,
+		); err != nil {
+			return collection, err
+		}
+		provinces = append(provinces, province)
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = provinces
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
 }
 
 func newProvince(row *sql.Row) (models.Province, error) {
