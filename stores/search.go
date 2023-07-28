@@ -43,7 +43,7 @@ func WithOrder(order string) Option {
 func WithLimit(limit int) Option {
 	return func(options *SearchOpts) {
 		if limit < 1 || limit > 250 {
-			options.Limit = 1
+			options.Limit = 25
 			return
 		}
 
