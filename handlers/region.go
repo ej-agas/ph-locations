@@ -28,7 +28,7 @@ func (handler RegionHandler) ListRegions(w http.ResponseWriter, r *http.Request)
 
 func (handler RegionHandler) ShowRegionByCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	code := vars["code"]
+	code := vars["regionCode"]
 	fmt.Println(code)
 	region, err := handler.store.FindByCode(code)
 	fmt.Println(region, err)

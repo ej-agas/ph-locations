@@ -41,3 +41,5 @@ Thumbs.db
 
 # ENV variables
 build/*.env
+build/docker-compose.yaml
+build/docker-compose.yml

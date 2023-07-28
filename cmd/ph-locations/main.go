@@ -28,15 +28,18 @@ func main() {
 		DatabaseName: os.Getenv("POSTGRES_DB"),
 	}
 
-	dbConn, err := postgresql.NewConnection(dbConfig)
+	conn, err := postgresql.NewConnection(dbConfig)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	provinceStore := postgresql.NewProvinceStore(dbConn)
+	provinceStore := postgresql.NewProvinceStore(conn)
 	provinceHandler := handlers.NewProvinceHandler(provinceStore)
 
-	regionStore := postgresql.NewRegionStore(dbConn)
+	districtStore := postgresql.NewDistrictStore(conn)
+	districtHandler := handlers.NewDistrictHandler(districtStore)
+
+	regionStore := postgresql.NewRegionStore(conn)
 	regionHandler := handlers.NewRegionHandler(regionStore)
 
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
@@ -46,8 +49,13 @@ func main() {
 	v1Router.HandleFunc("/provinces/{code}", provinceHandler.ShowProvinceById)
 
 	v1Router.HandleFunc("/regions", regionHandler.ListRegions)
-	v1Router.HandleFunc("/regions/{code}", regionHandler.ShowRegionByCode)
-	v1Router.HandleFunc("/regions/{code}/provinces", provinceHandler.ListByRegionId)
+	v1Router.HandleFunc("/regions/{regionCode}", regionHandler.ShowRegionByCode)
+
+	v1Router.HandleFunc("/regions/{regionCode}/provinces", provinceHandler.ListByRegionId)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}", provinceHandler.ShowByCode)
+
+	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionId)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}", districtHandler.ShowByCode)
 
 	log.Fatal(http.ListenAndServe(":6945", router))
 }

@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/ej-agas/ph-locations/models"
+	"github.com/ej-agas/ph-locations/stores"
+	"math"
 )
 
 type DistrictStore struct {
@@ -75,6 +77,62 @@ func (store DistrictStore) FindByName(name string) (models.District, error) {
 	}
 
 	return district, fmt.Errorf("error executing query: %w", err)
+}
+
+func (store DistrictStore) FindByRegionCode(code string, opts stores.SearchOpts) (stores.Collection[models.District], error) {
+	districts := make([]models.District, 0, opts.Limit)
+	collection := stores.Collection[models.District]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from districts WHERE region_code = $1", code).Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM districts WHERE region_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
+		code,
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	for rows.Next() {
+		var district models.District
+
+		if err := rows.Scan(
+			&district.Id,
+			&district.Code,
+			&district.Name,
+			&district.Population,
+			&district.RegionCode,
+		); err != nil {
+			return collection, err
+		}
+		districts = append(districts, district)
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = districts
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
 }
 
 func newDistrict(row *sql.Row) (models.District, error) {

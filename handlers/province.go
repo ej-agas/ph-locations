@@ -11,13 +11,6 @@ type ProvinceHandler struct {
 	store stores.ProvinceStore
 }
 
-var (
-	ErrInvalidCode  = ResponseMessage{StatusCode: http.StatusUnprocessableEntity, Message: "Invalid PSGC"}
-	ErrNotFound     = ResponseMessage{StatusCode: http.StatusNotFound, Message: "Province not found"}
-	ErrInvalidLimit = ResponseMessage{StatusCode: http.StatusUnprocessableEntity, Message: "Invalid Limit"}
-	ErrInvalidPage  = ResponseMessage{StatusCode: http.StatusUnprocessableEntity, Message: "Invalid Page"}
-)
-
 func NewProvinceHandler(store stores.ProvinceStore) *ProvinceHandler {
 	return &ProvinceHandler{store: store}
 }
@@ -28,14 +21,14 @@ func (handler ProvinceHandler) ShowProvinceById(w http.ResponseWriter, r *http.R
 	id, err := strconv.Atoi(vars["id"])
 
 	if err != nil {
-		JSONResponse(w, ErrInvalidCode, http.StatusUnprocessableEntity)
+		JSONResponse(w, ErrInvalidPSGC, http.StatusUnprocessableEntity)
 		return
 	}
 
 	province, err := handler.store.Find(id)
 
 	if err != nil {
-		JSONResponse(w, ErrNotFound, http.StatusNotFound)
+		JSONResponse(w, ErrProvinceNotFound, http.StatusNotFound)
 		return
 	}
 
@@ -45,9 +38,9 @@ func (handler ProvinceHandler) ShowProvinceById(w http.ResponseWriter, r *http.R
 func (handler ProvinceHandler) ShowByCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	province, err := handler.store.FindByCode(r.Context(), vars["code"])
+	province, err := handler.store.FindByCode(r.Context(), vars["provinceCode"])
 	if err != nil {
-		JSONResponse(w, ErrNotFound, http.StatusNotFound)
+		JSONResponse(w, ErrProvinceNotFound, http.StatusNotFound)
 		return
 	}
 
@@ -64,13 +57,11 @@ func (handler ProvinceHandler) ListByRegionId(w http.ResponseWriter, r *http.Req
 	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
 	if err != nil {
 		limit = 25
-		return
 	}
 
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
 		page = 1
-		return
 	}
 
 	if IsInAllowedColumns(order, allowedColumns) == false {
@@ -84,7 +75,7 @@ func (handler ProvinceHandler) ListByRegionId(w http.ResponseWriter, r *http.Req
 		stores.WithPage(page),
 	)
 
-	provinces, err := handler.store.FindByRegionCode(vars["code"], *opts)
+	provinces, err := handler.store.FindByRegionCode(vars["regionCode"], *opts)
 
 	if err != nil {
 		JSONResponse(w, err.Error(), http.StatusInternalServerError)

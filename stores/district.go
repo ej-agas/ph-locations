@@ -10,4 +10,5 @@ type DistrictStore interface {
 	Find(id int) (models.District, error)
 	FindByCode(code string) (models.District, error)
 	FindByName(name string) (models.District, error)
+	FindByRegionCode(code string, opts SearchOpts) (Collection[models.District], error)
 }

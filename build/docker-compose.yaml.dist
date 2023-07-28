@@ -18,6 +18,7 @@ services:
           cpus: '4'
           memory: 1G
     volumes:
+#   Change to your GOCACHE path for faster builds
       - ${GOCACHE}:/go/cache
   postgresql:
     image: postgres:15.3-alpine3.18
