@@ -45,6 +45,9 @@ func main() {
 	cityStore := postgresql.NewCityStore(conn)
 	cityHandler := handlers.NewCityHandler(cityStore)
 
+	municipalityStore := postgresql.NewMunicipalityStore(conn)
+	municipalityHandler := handlers.NewMunicipalityHandler(municipalityStore)
+
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
 	router.HandleFunc("/", handlers.Home)
 	v1Router := router.PathPrefix("/api/v1/").Subrouter()
@@ -58,6 +61,8 @@ func main() {
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}", provinceHandler.ShowByCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities", cityHandler.ListByProvinceCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}", cityHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities", municipalityHandler.ListByProvinceCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}", municipalityHandler.FindByCode)
 
 	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionId)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}", districtHandler.ShowByCode)

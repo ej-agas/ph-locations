@@ -10,4 +10,6 @@ type MunicipalityStore interface {
 	Find(id int) (models.Municipality, error)
 	FindByCode(code string) (models.Municipality, error)
 	FindByName(name string) (models.Municipality, error)
+	ListByProvinceCode(code string, opts SearchOpts) (Collection[models.Municipality], error)
+	ListByDistrictCode(code string, opts SearchOpts) (Collection[models.Municipality], error)
 }

@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/ej-agas/ph-locations/models"
+	"github.com/ej-agas/ph-locations/stores"
+	"math"
 )
 
 type MunicipalityStore struct {
@@ -86,22 +88,135 @@ func (store MunicipalityStore) FindByName(name string) (models.Municipality, err
 	return municipality, fmt.Errorf("error executing query: %s", err)
 }
 
-func newMunicipality(row *sql.Row) (models.Municipality, error) {
-	var municipality models.Municipality
+func (store MunicipalityStore) ListByProvinceCode(code string, opts stores.SearchOpts) (stores.Collection[models.Municipality], error) {
+	collection := stores.Collection[models.Municipality]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
 
-	err := row.Scan(
-		&municipality.Id,
-		&municipality.Code,
-		&municipality.Name,
-		&municipality.IncomeClass,
-		&municipality.Population,
-		&municipality.ProvinceCode,
-		&municipality.DistrictCode,
+	err := store.db.QueryRow("SELECT count(id) from municipalities WHERE province_code = $1", code).Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM municipalities WHERE province_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
+		code,
+		opts.Order,
+		opts.Limit,
+		offset,
 	)
 
 	if err != nil {
-		return municipality, err
+		return collection, err
 	}
 
-	return municipality, nil
+	municipalities, err := newMunicipalities(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = municipalities
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
+func (store MunicipalityStore) ListByDistrictCode(code string, opts stores.SearchOpts) (stores.Collection[models.Municipality], error) {
+	collection := stores.Collection[models.Municipality]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from municipalities WHERE district_code = $1", code).Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM municipalities WHERE district_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
+		code,
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	cities, err := newMunicipalities(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = cities
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
+func newMunicipalities(rows *sql.Rows, count int) ([]models.Municipality, error) {
+	municipalities := make([]models.Municipality, 0, count)
+
+	for rows.Next() {
+		var m models.Municipality
+
+		if err := rows.Scan(
+			&m.Id,
+			&m.Code,
+			&m.Name,
+			&m.IncomeClass,
+			&m.Population,
+			&m.ProvinceCode,
+			&m.DistrictCode,
+		); err != nil {
+			return municipalities, err
+		}
+		municipalities = append(municipalities, m)
+	}
+
+	return municipalities, nil
+}
+
+func newMunicipality(row *sql.Row) (models.Municipality, error) {
+	var m models.Municipality
+
+	err := row.Scan(
+		&m.Id,
+		&m.Code,
+		&m.Name,
+		&m.IncomeClass,
+		&m.Population,
+		&m.ProvinceCode,
+		&m.DistrictCode,
+	)
+
+	if err != nil {
+		return m, err
+	}
+
+	return m, nil
 }

@@ -20,7 +20,7 @@ func (handler CityHandler) ShowByCode(w http.ResponseWriter, r *http.Request) {
 
 	city, err := handler.store.FindByCode(vars["cityCode"])
 	if err != nil {
-		JSONResponse(w, ErrProvinceNotFound, http.StatusNotFound)
+		JSONResponse(w, ErrCityNotFound, http.StatusNotFound)
 		return
 	}
 
