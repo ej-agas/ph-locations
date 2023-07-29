@@ -4,7 +4,7 @@ import "github.com/ej-agas/ph-locations/models"
 
 type Collection[T models.Model] struct {
 	Data           []T            `json:"data"`
-	PaginationInfo PaginationInfo `json:"cursor"`
+	PaginationInfo PaginationInfo `json:"pagination"`
 }
 
 type PaginationInfo struct {

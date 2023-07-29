@@ -48,6 +48,12 @@ func main() {
 	municipalityStore := postgresql.NewMunicipalityStore(conn)
 	municipalityHandler := handlers.NewMunicipalityHandler(municipalityStore)
 
+	subMunicipalityStore := postgresql.NewSubMunicipalityStore(conn)
+	subMunicipalityHandler := handlers.NewSubMunicipalityHandler(subMunicipalityStore)
+
+	barangayStore := postgresql.NewBarangayStore(conn)
+	barangayHandler := handlers.NewBarangayHandler(barangayStore)
+
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
 	router.HandleFunc("/", handlers.Home)
 	v1Router := router.PathPrefix("/api/v1/").Subrouter()
@@ -61,11 +67,21 @@ func main() {
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}", provinceHandler.ShowByCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities", cityHandler.ListByProvinceCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}", cityHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/barangays", barangayHandler.ListByCityCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
+
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities", municipalityHandler.ListByProvinceCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}", municipalityHandler.FindByCode)
 
 	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionId)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}", districtHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities", cityHandler.ListByDistrictCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}", cityHandler.ShowByCode)
+
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/sub-municipalities", subMunicipalityHandler.ListByCityCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}", subMunicipalityHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}/barangays", barangayHandler.ListBySubMunicipalityCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
 
 	log.Fatal(http.ListenAndServe(":6945", router))
 }

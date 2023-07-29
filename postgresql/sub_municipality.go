@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/ej-agas/ph-locations/models"
+	"github.com/ej-agas/ph-locations/stores"
+	"math"
 )
 
 type SubMunicipalityStore struct {
@@ -82,6 +84,72 @@ func (store SubMunicipalityStore) FindByName(name string) (models.SubMunicipalit
 	}
 
 	return subMunicipality, fmt.Errorf("error executing query: %w", err)
+}
+
+func (store SubMunicipalityStore) ListByCityCode(code string, opts stores.SearchOpts) (stores.Collection[models.SubMunicipality], error) {
+	collection := stores.Collection[models.SubMunicipality]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from sub_municipalities WHERE city_code = $1", code).Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM sub_municipalities WHERE city_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
+		code,
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	subMunicipalities, err := newSubMunicipalities(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = subMunicipalities
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
+func newSubMunicipalities(rows *sql.Rows, count int) ([]models.SubMunicipality, error) {
+	subMunicipalities := make([]models.SubMunicipality, 0, count)
+
+	for rows.Next() {
+		var s models.SubMunicipality
+
+		if err := rows.Scan(
+			&s.Id,
+			&s.Code,
+			&s.Name,
+			&s.Population,
+			&s.CityCode,
+		); err != nil {
+			return subMunicipalities, err
+		}
+		subMunicipalities = append(subMunicipalities, s)
+	}
+
+	return subMunicipalities, nil
 }
 
 func newSubMunicipality(row *sql.Row) (models.SubMunicipality, error) {

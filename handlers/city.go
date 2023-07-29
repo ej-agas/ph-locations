@@ -63,3 +63,40 @@ func (handler CityHandler) ListByProvinceCode(w http.ResponseWriter, r *http.Req
 
 	JSONResponse(w, districts, http.StatusOK)
 }
+
+func (handler CityHandler) ListByDistrictCode(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	allowedColumns := []string{"id", "code", "name", "population"}
+
+	sort := r.URL.Query().Get("sort")
+	order := r.URL.Query().Get("order")
+
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		limit = 25
+	}
+
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil {
+		page = 1
+	}
+
+	if IsInAllowedColumns(order, allowedColumns) == false {
+		order = "id"
+	}
+
+	opts := stores.NewSearchOpts(
+		stores.WithSort(sort),
+		stores.WithOrder(order),
+		stores.WithLimit(limit),
+		stores.WithPage(page),
+	)
+
+	districts, err := handler.store.ListByDistrictCode(vars["districtCode"], *opts)
+	if err != nil {
+		JSONResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	JSONResponse(w, districts, http.StatusOK)
+}
