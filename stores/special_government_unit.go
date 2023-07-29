@@ -6,8 +6,9 @@ import (
 )
 
 type SpecialGovernmentUnit interface {
-	Save(ctx context.Context, subMunicipality models.SubMunicipality) error
-	Find(id int) (models.SubMunicipality, error)
-	FindByCode(code string) (models.SubMunicipality, error)
-	FindByName(name string) (models.SubMunicipality, error)
+	Save(ctx context.Context, subMunicipality models.SpecialGovernmentUnit) error
+	Find(id int) (models.SpecialGovernmentUnit, error)
+	FindByCode(code string) (models.SpecialGovernmentUnit, error)
+	FindByName(name string) (models.SpecialGovernmentUnit, error)
+	ListByProvinceCode(code string, opts SearchOpts) (Collection[models.SpecialGovernmentUnit], error)
 }

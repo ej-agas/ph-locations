@@ -166,7 +166,7 @@ func (handler BarangayHandler) ListBySpecialGovernmentUnitCode(w http.ResponseWr
 		stores.WithPage(page),
 	)
 
-	barangays, err := handler.store.ListBySpecialGovernmentUnitCode(vars["specialGovernmentUnitCode"], *opts)
+	barangays, err := handler.store.ListBySpecialGovernmentUnitCode(vars["sguCode"], *opts)
 	if err != nil {
 		JSONResponse(w, err.Error(), http.StatusInternalServerError)
 		return

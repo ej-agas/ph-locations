@@ -12,4 +12,5 @@ var (
 	ErrCityNotFound            = ResponseMessage{StatusCode: http.StatusNotFound, Message: "City not found"}
 	ErrBarangayNotFound        = ResponseMessage{StatusCode: http.StatusNotFound, Message: "Barangay not found"}
 	ErrSubMunicipalityNotFound = ResponseMessage{StatusCode: http.StatusNotFound, Message: "Sub-Municipality not found"}
+	ErrSGUNotFound             = ResponseMessage{StatusCode: http.StatusNotFound, Message: "Special Government Unit not found"}
 )

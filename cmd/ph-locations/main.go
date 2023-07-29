@@ -54,29 +54,51 @@ func main() {
 	barangayStore := postgresql.NewBarangayStore(conn)
 	barangayHandler := handlers.NewBarangayHandler(barangayStore)
 
+	sguStore := postgresql.NewSpecialGovernmentUnit(conn)
+	sguHandler := handlers.NewSGUHandler(sguStore)
+
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
 	router.HandleFunc("/", handlers.Home)
 	v1Router := router.PathPrefix("/api/v1/").Subrouter()
-	v1Router.HandleFunc("/provinces/{id}", provinceHandler.ShowProvinceById)
-	v1Router.HandleFunc("/provinces/{code}", provinceHandler.ShowProvinceById)
 
 	v1Router.HandleFunc("/regions", regionHandler.ListRegions)
 	v1Router.HandleFunc("/regions/{regionCode}", regionHandler.ShowRegionByCode)
 
+	v1Router.HandleFunc("/provinces/{id}", provinceHandler.ShowProvinceById)
+	v1Router.HandleFunc("/provinces/{code}", provinceHandler.ShowProvinceById)
+
 	v1Router.HandleFunc("/regions/{regionCode}/provinces", provinceHandler.ListByRegionId)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}", provinceHandler.ShowByCode)
+
+	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionId)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}", districtHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities", cityHandler.ListByDistrictCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}", cityHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}/barangays", barangayHandler.ListByCityCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}/sub-municipalities", subMunicipalityHandler.ListByCityCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}", subMunicipalityHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}/barangays", barangayHandler.ListBySubMunicipalityCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/municipalities", municipalityHandler.ListByDistrictCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/municipalities/{municipalityCode}", municipalityHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/municipalities/{municipalityCode}/barangays", barangayHandler.ListByMunicipalityCode)
+	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/municipalities/{municipalityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
+
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities", cityHandler.ListByProvinceCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}", cityHandler.ShowByCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/barangays", barangayHandler.ListByCityCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
 
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities", municipalityHandler.ListByProvinceCode)
-	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}", municipalityHandler.FindByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}", municipalityHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/barangays", barangayHandler.ListByMunicipalityCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
 
-	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionId)
-	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}", districtHandler.ShowByCode)
-	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities", cityHandler.ListByDistrictCode)
-	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}", cityHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/special-government-units", sguHandler.ListByProvinceCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/special-government-units/{sguCode}", sguHandler.ShowByCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/special-government-units/{sguCode}/barangays", barangayHandler.ListBySpecialGovernmentUnitCode)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/special-government-units/{sguCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
 
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/sub-municipalities", subMunicipalityHandler.ListByCityCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}", subMunicipalityHandler.ShowByCode)

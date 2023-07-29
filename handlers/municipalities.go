@@ -15,7 +15,7 @@ func NewMunicipalityHandler(store stores.MunicipalityStore) *MunicipalityHandler
 	return &MunicipalityHandler{store: store}
 }
 
-func (handler MunicipalityHandler) FindByCode(w http.ResponseWriter, r *http.Request) {
+func (handler MunicipalityHandler) ShowByCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	municipality, err := handler.store.FindByCode(vars["municipalityCode"])
