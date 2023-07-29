@@ -79,8 +79,51 @@ func (store DistrictStore) FindByName(name string) (models.District, error) {
 	return district, fmt.Errorf("error executing query: %w", err)
 }
 
-func (store DistrictStore) FindByRegionCode(code string, opts stores.SearchOpts) (stores.Collection[models.District], error) {
-	districts := make([]models.District, 0, opts.Limit)
+func (store DistrictStore) List(opts stores.SearchOpts) (stores.Collection[models.District], error) {
+	collection := stores.Collection[models.District]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from districts").Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM districts ORDER BY $1 LIMIT $2 OFFSET $3",
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	districts, err := newDistricts(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = districts
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
+func (store DistrictStore) ListByRegionCode(code string, opts stores.SearchOpts) (stores.Collection[models.District], error) {
 	collection := stores.Collection[models.District]{}
 	var totalRows int64
 	var totalPages float64
@@ -108,19 +151,9 @@ func (store DistrictStore) FindByRegionCode(code string, opts stores.SearchOpts)
 		return collection, err
 	}
 
-	for rows.Next() {
-		var district models.District
-
-		if err := rows.Scan(
-			&district.Id,
-			&district.Code,
-			&district.Name,
-			&district.Population,
-			&district.RegionCode,
-		); err != nil {
-			return collection, err
-		}
-		districts = append(districts, district)
+	districts, err := newDistricts(rows, opts.Limit)
+	if err != nil {
+		return collection, err
 	}
 
 	paginationInfo := stores.PaginationInfo{
@@ -133,6 +166,27 @@ func (store DistrictStore) FindByRegionCode(code string, opts stores.SearchOpts)
 	collection.PaginationInfo = paginationInfo
 
 	return collection, nil
+}
+
+func newDistricts(rows *sql.Rows, count int) ([]models.District, error) {
+	districts := make([]models.District, 0, count)
+
+	for rows.Next() {
+		var d models.District
+
+		if err := rows.Scan(
+			&d.Id,
+			&d.Code,
+			&d.Name,
+			&d.Population,
+			&d.RegionCode,
+		); err != nil {
+			return districts, err
+		}
+		districts = append(districts, d)
+	}
+
+	return districts, nil
 }
 
 func newDistrict(row *sql.Row) (models.District, error) {

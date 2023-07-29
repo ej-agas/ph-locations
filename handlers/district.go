@@ -27,6 +27,18 @@ func (handler DistrictHandler) ShowByCode(w http.ResponseWriter, r *http.Request
 	JSONResponse(w, district, http.StatusOK)
 }
 
+func (handler DistrictHandler) List(w http.ResponseWriter, r *http.Request) {
+	opts := NewSearchOptsFromRequest(r)
+
+	districts, err := handler.store.List(*opts)
+	if err != nil {
+		JSONResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	JSONResponse(w, districts, http.StatusOK)
+}
+
 func (handler DistrictHandler) ListByRegionId(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	allowedColumns := []string{"id", "code", "name", "population"}
@@ -55,7 +67,7 @@ func (handler DistrictHandler) ListByRegionId(w http.ResponseWriter, r *http.Req
 		stores.WithPage(page),
 	)
 
-	districts, err := handler.store.FindByRegionCode(vars["regionCode"], *opts)
+	districts, err := handler.store.ListByRegionCode(vars["regionCode"], *opts)
 	if err != nil {
 		JSONResponse(w, err.Error(), http.StatusInternalServerError)
 		return

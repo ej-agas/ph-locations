@@ -47,35 +47,24 @@ func (handler ProvinceHandler) ShowByCode(w http.ResponseWriter, r *http.Request
 	JSONResponse(w, province, http.StatusOK)
 }
 
+func (handler ProvinceHandler) List(w http.ResponseWriter, r *http.Request) {
+	opts := NewSearchOptsFromRequest(r)
+
+	provinces, err := handler.store.List(*opts)
+
+	if err != nil {
+		JSONResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	JSONResponse(w, provinces, http.StatusOK)
+}
+
 func (handler ProvinceHandler) ListByRegionId(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	allowedColumns := []string{"id", "code", "name", "population"}
+	opts := NewSearchOptsFromRequest(r)
 
-	sort := r.URL.Query().Get("sort")
-	order := r.URL.Query().Get("order")
-
-	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
-	if err != nil {
-		limit = 25
-	}
-
-	page, err := strconv.Atoi(r.URL.Query().Get("page"))
-	if err != nil {
-		page = 1
-	}
-
-	if IsInAllowedColumns(order, allowedColumns) == false {
-		order = "id"
-	}
-
-	opts := stores.NewSearchOpts(
-		stores.WithSort(sort),
-		stores.WithOrder(order),
-		stores.WithLimit(limit),
-		stores.WithPage(page),
-	)
-
-	provinces, err := handler.store.FindByRegionCode(vars["regionCode"], *opts)
+	provinces, err := handler.store.ListByRegionCode(vars["regionCode"], *opts)
 
 	if err != nil {
 		JSONResponse(w, err.Error(), http.StatusInternalServerError)

@@ -64,11 +64,14 @@ func main() {
 	v1Router.HandleFunc("/regions", regionHandler.ListRegions)
 	v1Router.HandleFunc("/regions/{regionCode}", regionHandler.ShowRegionByCode)
 
-	v1Router.HandleFunc("/provinces/{id}", provinceHandler.ShowProvinceById)
-	v1Router.HandleFunc("/provinces/{code}", provinceHandler.ShowProvinceById)
+	v1Router.HandleFunc("/provinces", provinceHandler.List)
+	v1Router.HandleFunc("/provinces/{provinceCode}", provinceHandler.ShowByCode)
 
-	v1Router.HandleFunc("/regions/{regionCode}/provinces", provinceHandler.ListByRegionId)
-	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}", provinceHandler.ShowByCode)
+	v1Router.HandleFunc("/districts", districtHandler.List)
+	v1Router.HandleFunc("/districts/{districtCode}", districtHandler.ShowByCode)
+
+	v1Router.HandleFunc("/cities", cityHandler.List)
+	v1Router.HandleFunc("/cities/{cityCode}", cityHandler.ShowByCode)
 
 	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionId)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}", districtHandler.ShowByCode)
@@ -85,6 +88,8 @@ func main() {
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/municipalities/{municipalityCode}/barangays", barangayHandler.ListByMunicipalityCode)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/municipalities/{municipalityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
 
+	v1Router.HandleFunc("/regions/{regionCode}/provinces", provinceHandler.ListByRegionId)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}", provinceHandler.ShowByCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities", cityHandler.ListByProvinceCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}", cityHandler.ShowByCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/barangays", barangayHandler.ListByCityCode)

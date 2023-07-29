@@ -10,5 +10,6 @@ type ProvinceStore interface {
 	Find(id int) (models.Province, error)
 	FindByCode(ctx context.Context, code string) (models.Province, error)
 	FindByName(ctx context.Context, name string) (models.Province, error)
-	FindByRegionCode(code string, opts SearchOpts) (Collection[models.Province], error)
+	List(opts SearchOpts) (Collection[models.Province], error)
+	ListByRegionCode(code string, opts SearchOpts) (Collection[models.Province], error)
 }

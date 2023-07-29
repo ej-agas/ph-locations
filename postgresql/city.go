@@ -89,6 +89,50 @@ func (store CityStore) FindByName(name string) (models.City, error) {
 	return city, fmt.Errorf("error executing query: %w", err)
 }
 
+func (store CityStore) List(opts stores.SearchOpts) (stores.Collection[models.City], error) {
+	collection := stores.Collection[models.City]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from cities").Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM cities ORDER BY $1 LIMIT $2 OFFSET $3",
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	cities, err := newCities(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = cities
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
 func (store CityStore) ListByProvinceCode(code string, opts stores.SearchOpts) (stores.Collection[models.City], error) {
 	collection := stores.Collection[models.City]{}
 	var totalRows int64

@@ -27,6 +27,18 @@ func (handler CityHandler) ShowByCode(w http.ResponseWriter, r *http.Request) {
 	JSONResponse(w, city, http.StatusOK)
 }
 
+func (handler CityHandler) List(w http.ResponseWriter, r *http.Request) {
+	opts := NewSearchOptsFromRequest(r)
+
+	cities, err := handler.store.List(*opts)
+	if err != nil {
+		JSONResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	JSONResponse(w, cities, http.StatusOK)
+}
+
 func (handler CityHandler) ListByProvinceCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	allowedColumns := []string{"id", "code", "name", "population"}
