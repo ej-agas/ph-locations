@@ -81,6 +81,50 @@ func (store SpecialGovernmentUnit) FindByName(name string) (models.SpecialGovern
 	return sgu, fmt.Errorf("error executing query: %w", err)
 }
 
+func (store SpecialGovernmentUnit) List(opts stores.SearchOpts) (stores.Collection[models.SpecialGovernmentUnit], error) {
+	collection := stores.Collection[models.SpecialGovernmentUnit]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from special_government_units").Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM special_government_units ORDER BY $1 LIMIT $2 OFFSET $3",
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	sgus, err := newSpecialGovernmentUnits(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = sgus
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
 func (store SpecialGovernmentUnit) ListByProvinceCode(code string, opts stores.SearchOpts) (stores.Collection[models.SpecialGovernmentUnit], error) {
 	collection := stores.Collection[models.SpecialGovernmentUnit]{}
 	var totalRows int64

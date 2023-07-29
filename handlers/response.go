@@ -19,3 +19,7 @@ func JSONResponse(w http.ResponseWriter, data interface{}, statusCode int) {
 	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(data)
 }
+
+func EmptyResponse(w http.ResponseWriter, statusCode int) {
+	w.WriteHeader(statusCode)
+}

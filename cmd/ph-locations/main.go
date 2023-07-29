@@ -73,6 +73,18 @@ func main() {
 	v1Router.HandleFunc("/cities", cityHandler.List)
 	v1Router.HandleFunc("/cities/{cityCode}", cityHandler.ShowByCode)
 
+	v1Router.HandleFunc("/municipalities", municipalityHandler.List)
+	v1Router.HandleFunc("/municipalities/{municipalityCode}", municipalityHandler.ShowByCode)
+
+	v1Router.HandleFunc("/sub-municipalities", subMunicipalityHandler.List)
+	v1Router.HandleFunc("/sub-municipalities/{subMunicipalityCode}", subMunicipalityHandler.ShowByCode)
+
+	v1Router.HandleFunc("/special-government-units", sguHandler.List)
+	v1Router.HandleFunc("/special-government-units/{sguCode}", sguHandler.ShowByCode)
+
+	v1Router.HandleFunc("/barangays", barangayHandler.List)
+	v1Router.HandleFunc("/barangays/{barangayCode}", barangayHandler.ShowByCode)
+
 	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionId)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}", districtHandler.ShowByCode)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities", cityHandler.ListByDistrictCode)

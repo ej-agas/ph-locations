@@ -10,6 +10,7 @@ type BarangayStore interface {
 	Find(id int) (models.Barangay, error)
 	FindByCode(code string) (models.Barangay, error)
 	FindByName(name string) (models.Barangay, error)
+	List(opts SearchOpts) (Collection[models.Barangay], error)
 	ListByCityCode(code string, opts SearchOpts) (Collection[models.Barangay], error)
 	ListByMunicipalityCode(code string, opts SearchOpts) (Collection[models.Barangay], error)
 	ListBySubMunicipalityCode(code string, opts SearchOpts) (Collection[models.Barangay], error)

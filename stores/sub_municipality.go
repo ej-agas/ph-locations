@@ -10,5 +10,6 @@ type SubMunicipality interface {
 	Find(id int) (models.SubMunicipality, error)
 	FindByCode(code string) (models.SubMunicipality, error)
 	FindByName(name string) (models.SubMunicipality, error)
+	List(opts SearchOpts) (Collection[models.SubMunicipality], error)
 	ListByCityCode(code string, opts SearchOpts) (Collection[models.SubMunicipality], error)
 }

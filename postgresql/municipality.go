@@ -88,6 +88,50 @@ func (store MunicipalityStore) FindByName(name string) (models.Municipality, err
 	return municipality, fmt.Errorf("error executing query: %s", err)
 }
 
+func (store MunicipalityStore) List(opts stores.SearchOpts) (stores.Collection[models.Municipality], error) {
+	collection := stores.Collection[models.Municipality]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from municipalities").Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM municipalities ORDER BY $1 LIMIT $2 OFFSET $3",
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	municipalities, err := newMunicipalities(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = municipalities
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
 func (store MunicipalityStore) ListByProvinceCode(code string, opts stores.SearchOpts) (stores.Collection[models.Municipality], error) {
 	collection := stores.Collection[models.Municipality]{}
 	var totalRows int64

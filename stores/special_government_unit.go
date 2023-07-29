@@ -10,5 +10,6 @@ type SpecialGovernmentUnit interface {
 	Find(id int) (models.SpecialGovernmentUnit, error)
 	FindByCode(code string) (models.SpecialGovernmentUnit, error)
 	FindByName(name string) (models.SpecialGovernmentUnit, error)
+	List(opts SearchOpts) (Collection[models.SpecialGovernmentUnit], error)
 	ListByProvinceCode(code string, opts SearchOpts) (Collection[models.SpecialGovernmentUnit], error)
 }

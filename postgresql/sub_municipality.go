@@ -86,6 +86,50 @@ func (store SubMunicipalityStore) FindByName(name string) (models.SubMunicipalit
 	return subMunicipality, fmt.Errorf("error executing query: %w", err)
 }
 
+func (store SubMunicipalityStore) List(opts stores.SearchOpts) (stores.Collection[models.SubMunicipality], error) {
+	collection := stores.Collection[models.SubMunicipality]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from sub_municipalities").Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM sub_municipalities ORDER BY $1 LIMIT $2 OFFSET $3",
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	subMunicipalities, err := newSubMunicipalities(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = subMunicipalities
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
 func (store SubMunicipalityStore) ListByCityCode(code string, opts stores.SearchOpts) (stores.Collection[models.SubMunicipality], error) {
 	collection := stores.Collection[models.SubMunicipality]{}
 	var totalRows int64

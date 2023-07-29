@@ -90,6 +90,50 @@ func (store BarangayStore) FindByName(name string) (models.Barangay, error) {
 	return barangay, fmt.Errorf("error executing query: %w", err)
 }
 
+func (store BarangayStore) List(opts stores.SearchOpts) (stores.Collection[models.Barangay], error) {
+	collection := stores.Collection[models.Barangay]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
+
+	err := store.db.QueryRow("SELECT count(id) from barangays").Scan(&totalRows)
+	if err != nil {
+		return collection, err
+	}
+
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	rows, err := store.db.Query(
+		"SELECT * FROM barangays ORDER BY $1 LIMIT $2 OFFSET $3",
+		opts.Order,
+		opts.Limit,
+		offset,
+	)
+
+	if err != nil {
+		return collection, err
+	}
+
+	barangays, err := newBarangays(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = barangays
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
 func (store BarangayStore) ListByCityCode(code string, opts stores.SearchOpts) (stores.Collection[models.Barangay], error) {
 	collection := stores.Collection[models.Barangay]{}
 	var totalRows int64
