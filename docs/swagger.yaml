@@ -1,0 +1,114 @@
+basePath: /api/v1
+definitions:
+  github_com_ej-agas_ph-locations_stores.Collection-models_Region:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Region'
+        type: array
+      pagination:
+        $ref: '#/definitions/stores.PaginationInfo'
+    type: object
+  handlers.ResponseMessage:
+    properties:
+      message:
+        description: |-
+          Extensions:
+          x-order: '1'
+        type: string
+      status_code:
+        description: |-
+          error response body
+          in:body
+          Extensions:
+          x-order: '0'
+        type: integer
+    type: object
+  models.Region:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+      population:
+        type: integer
+    type: object
+  stores.PaginationInfo:
+    properties:
+      current_page:
+        type: integer
+      per_page:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+host: localhost:6945
+info:
+  contact:
+    name: EJ Agas
+    url: https://github.com/ej-agas
+  description: Philippine Standard Geographic Code (PSGC) REST API
+  license:
+    name: GPL v2.0 License
+    url: https://github.com/learning-cloud-native-go/myapp/blob/master/LICENSE
+  title: PSGC API
+  version: v0.1.0
+paths:
+  /regions:
+    get:
+      description: List Regions
+      parameters:
+      - description: Order by PSGC, Name, Population
+        in: query
+        name: order
+        type: string
+      - description: Sort by ASC (Ascending) DESC (Descending)
+        in: query
+        name: sort
+        type: string
+      - description: 'Limit count per page default: 25 per page'
+        in: query
+        name: limit
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Region'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ResponseMessage'
+      summary: List Regions
+      tags:
+      - regions
+  /regions/{regionCode}:
+    get:
+      description: Show Region by Region Code
+      parameters:
+      - description: Region PSGC
+        in: path
+        name: regionCode
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Region'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ResponseMessage'
+      summary: Show Region
+      tags:
+      - regions
+swagger: "2.0"

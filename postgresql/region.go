@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/ej-agas/ph-locations/models"
+	"github.com/ej-agas/ph-locations/stores"
+	"math"
 )
 
 type RegionStore struct {
@@ -76,25 +78,57 @@ func (store RegionStore) FindByName(name string) (models.Region, error) {
 	return region, fmt.Errorf("error executing query: %s", err)
 }
 
-func (store RegionStore) All() ([]models.Region, error) {
-	regions := make([]models.Region, 0)
+func (store RegionStore) List(opts stores.SearchOpts) (stores.Collection[models.Region], error) {
+	collection := stores.Collection[models.Region]{}
+	var totalRows int64
+	var totalPages float64
+	offset := (opts.Page - 1) * opts.Limit
 
-	rows, err := store.db.Query("SELECT * FROM regions")
-
-	if err == sql.ErrNoRows {
-		return regions, nil
+	err := store.db.QueryRow("SELECT count(id) from regions").Scan(&totalRows)
+	if err != nil {
+		return collection, err
 	}
 
-	defer rows.Close()
+	totalPages = math.Ceil(float64(totalRows) / float64(opts.Limit))
+	if totalRows < int64(opts.Limit) {
+		totalPages = 1
+	}
+
+	q := fmt.Sprintf("SELECT * FROM regions ORDER BY %s %s LIMIT $1 OFFSET $2", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, opts.Limit, offset)
+
+	if err != nil {
+		return collection, err
+	}
+
+	regions, err := newRegions(rows, opts.Limit)
+	if err != nil {
+		return collection, err
+	}
+
+	paginationInfo := stores.PaginationInfo{
+		TotalPages:  int(totalPages),
+		PerPage:     opts.Limit,
+		CurrentPage: opts.Page,
+	}
+
+	collection.Data = regions
+	collection.PaginationInfo = paginationInfo
+
+	return collection, nil
+}
+
+func newRegions(rows *sql.Rows, count int) ([]models.Region, error) {
+	regions := make([]models.Region, 0, count)
 
 	for rows.Next() {
-		region := models.Region{}
+		var r models.Region
 
-		if err := rows.Scan(&region.Id, &region.Code, &region.Name, &region.Population); err != nil {
-			return regions, fmt.Errorf("error scanning row: %s", err)
+		if err := rows.Scan(&r.Id, &r.Code, &r.Name, &r.Population); err != nil {
+			return regions, err
 		}
-
-		regions = append(regions, region)
+		fmt.Printf("%#v\n", r)
+		regions = append(regions, r)
 	}
 
 	return regions, nil

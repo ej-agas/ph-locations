@@ -1,0 +1,164 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Philippine Standard Geographic Code (PSGC) REST API",
+        "title": "PSGC API",
+        "contact": {
+            "name": "EJ Agas",
+            "url": "https://github.com/ej-agas"
+        },
+        "license": {
+            "name": "GPL v2.0 License",
+            "url": "https://github.com/learning-cloud-native-go/myapp/blob/master/LICENSE"
+        },
+        "version": "v0.1.0"
+    },
+    "host": "localhost:6945",
+    "basePath": "/api/v1",
+    "paths": {
+        "/regions": {
+            "get": {
+                "description": "List Regions",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "regions"
+                ],
+                "summary": "List Regions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order by PSGC, Name, Population",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by ASC (Ascending) DESC (Descending)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit count per page default: 25 per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Region"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/regions/{regionCode}": {
+            "get": {
+                "description": "Show Region by Region Code",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "regions"
+                ],
+                "summary": "Show Region",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Region PSGC",
+                        "name": "regionCode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Region"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_ej-agas_ph-locations_stores.Collection-models_Region": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Region"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/stores.PaginationInfo"
+                }
+            }
+        },
+        "handlers.ResponseMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "Extensions:\nx-order: '1'",
+                    "type": "string"
+                },
+                "status_code": {
+                    "description": "error response body\nin:body\nExtensions:\nx-order: '0'",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Region": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "integer"
+                }
+            }
+        },
+        "stores.PaginationInfo": {
+            "type": "object",
+            "properties": {
+                "current_page": {
+                    "type": "integer"
+                },
+                "per_page": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

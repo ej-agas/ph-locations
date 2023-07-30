@@ -10,5 +10,5 @@ type RegionStore interface {
 	Find(id int) (models.Region, error)
 	FindByCode(code string) (models.Region, error)
 	FindByName(name string) (models.Region, error)
-	All() ([]models.Region, error)
+	List(opts SearchOpts) (Collection[models.Region], error)
 }

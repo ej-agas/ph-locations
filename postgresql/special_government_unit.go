@@ -97,12 +97,8 @@ func (store SpecialGovernmentUnit) List(opts stores.SearchOpts) (stores.Collecti
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM special_government_units ORDER BY $1 LIMIT $2 OFFSET $3",
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM special_government_units ORDER BY %s %s LIMIT $1 OFFSET $2", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -141,13 +137,8 @@ func (store SpecialGovernmentUnit) ListByProvinceCode(code string, opts stores.S
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM special_government_units WHERE province_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
-		code,
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM special_government_units WHERE province_code = $1 ORDER BY %s %s LIMIT $1 OFFSET $2", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err

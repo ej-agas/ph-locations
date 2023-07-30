@@ -105,12 +105,8 @@ func (store CityStore) List(opts stores.SearchOpts) (stores.Collection[models.Ci
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM cities ORDER BY $1 LIMIT $2 OFFSET $3",
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM cities ORDER BY %s %s LIMIT $1 OFFSET $2", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -149,13 +145,8 @@ func (store CityStore) ListByProvinceCode(code string, opts stores.SearchOpts) (
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM cities WHERE province_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
-		code,
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM cities WHERE province_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -194,13 +185,8 @@ func (store CityStore) ListByDistrictCode(code string, opts stores.SearchOpts) (
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM cities WHERE district_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
-		code,
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM cities WHERE district_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err

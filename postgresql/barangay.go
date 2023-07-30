@@ -106,12 +106,8 @@ func (store BarangayStore) List(opts stores.SearchOpts) (stores.Collection[model
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM barangays ORDER BY $1 LIMIT $2 OFFSET $3",
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM barangays ORDER BY %s %s LIMIT $1 OFFSET $2", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -150,13 +146,8 @@ func (store BarangayStore) ListByCityCode(code string, opts stores.SearchOpts) (
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM barangays WHERE city_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
-		code,
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE city_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -195,13 +186,8 @@ func (store BarangayStore) ListByMunicipalityCode(code string, opts stores.Searc
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM barangays WHERE municipality_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
-		code,
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE municipality_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -240,13 +226,8 @@ func (store BarangayStore) ListBySubMunicipalityCode(code string, opts stores.Se
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM barangays WHERE sub_municipality_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
-		code,
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE sub_municipality_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -285,13 +266,8 @@ func (store BarangayStore) ListBySpecialGovernmentUnitCode(code string, opts sto
 		totalPages = 1
 	}
 
-	rows, err := store.db.Query(
-		"SELECT * FROM barangays WHERE special_government_unit_code = $1 ORDER BY $2 LIMIT $3 OFFSET $4",
-		code,
-		opts.Order,
-		opts.Limit,
-		offset,
-	)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE special_government_unit_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err

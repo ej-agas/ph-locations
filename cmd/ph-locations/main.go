@@ -2,15 +2,29 @@ package main
 
 import (
 	"fmt"
+	_ "github.com/ej-agas/ph-locations/docs"
 	"github.com/ej-agas/ph-locations/handlers"
 	"github.com/ej-agas/ph-locations/postgresql"
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 )
 
+//	@title			PSGC API
+//	@version		v0.1.0
+//	@description	Philippine Standard Geographic Code (PSGC) REST API
+
+//	@contact.name	EJ Agas
+//	@contact.url	https://github.com/ej-agas
+
+//	@license.name	GPL v2.0 License
+//	@license.url	https://github.com/learning-cloud-native-go/myapp/blob/master/LICENSE
+
+//	@host		localhost:6945
+//	@basePath	/api/v1
 func main() {
 	router := mux.NewRouter()
 
@@ -59,6 +73,13 @@ func main() {
 
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
 	router.HandleFunc("/", handlers.Home)
+	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:6945/swagger/doc.json"), //The url pointing to API definition
+		httpSwagger.DeepLinking(true),
+		httpSwagger.DocExpansion("none"),
+		httpSwagger.DomID("swagger-ui"),
+	)).Methods(http.MethodGet)
+
 	v1Router := router.PathPrefix("/api/v1/").Subrouter()
 
 	v1Router.HandleFunc("/regions", regionHandler.ListRegions)
