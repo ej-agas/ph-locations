@@ -5,9 +5,10 @@ services:
     image: ph-locations:latest
     container_name: ph-locations-app
     restart: unless-stopped
-    tty: true
+    depends_on:
+      - postgresql
     env_file:
-      - app.env.example
+      - app.env
     ports:
       - "6945:6945"
     networks:
@@ -15,22 +16,15 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4'
-          memory: 1G
-    volumes:
-#   Change to your GOCACHE path for faster builds
-      - ${GOCACHE}:/go/cache
+          cpus: '2'
+          memory: 128M
   postgresql:
     image: postgres:15.3-alpine3.18
     container_name: ph-locations-db
     restart: unless-stopped
     tty: true
-    environment:
-      POSTGRES_USER: ph_locations_user
-      POSTGRES_PASSWORD: wLdUgQ7kUwTZp65TRoEA
-      POSTGRES_DB: ph_locations_db
-#    env_file:
-#      - app.env.example
+    env_file:
+      - app.env
     ports:
       - "5432:5432"
     volumes:
@@ -41,7 +35,7 @@ services:
       resources:
         limits:
           cpus: '2'
-          memory: 1G
+          memory: 128M
 volumes:
   postgresql:
     driver: local

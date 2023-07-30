@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/ej-agas/ph-locations/stores"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -41,7 +40,7 @@ func (handler RegionHandler) List(w http.ResponseWriter, r *http.Request) {
 	JSONResponse(w, regions, http.StatusOK)
 }
 
-// ShowRegionByCode godoc
+// ShowByCode godoc
 //
 //	@summary		Show Region
 //	@description	Show Region by Philippine Standard Geographic Code (PSGC)
@@ -51,12 +50,10 @@ func (handler RegionHandler) List(w http.ResponseWriter, r *http.Request) {
 //	@failure		404			{object}	handlers.ResponseMessage
 //	@param			regionCode	path		string	true	"Region PSGC"
 //	@router			/regions/{regionCode} [get]
-func (handler RegionHandler) ShowRegionByCode(w http.ResponseWriter, r *http.Request) {
+func (handler RegionHandler) ShowByCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	code := vars["regionCode"]
-	fmt.Println(code)
-	region, err := handler.store.FindByCode(code)
-	fmt.Println(region, err)
+
+	region, err := handler.store.FindByCode(vars["regionCode"])
 	if err != nil {
 		JSONResponse(w, ErrRegionNotFound, http.StatusNotFound)
 		return

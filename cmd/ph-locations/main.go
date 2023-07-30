@@ -74,7 +74,7 @@ func main() {
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
 	router.HandleFunc("/", handlers.Home)
 	router.PathPrefix("/docs/").Handler(httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:6945/docs/doc.json"), //The url pointing to API definition
+		httpSwagger.URL(fmt.Sprintf("http://%s:%s/docs/doc.json", os.Getenv("APP_HOST"), os.Getenv("APP_PORT"))), //The url pointing to API definition
 		httpSwagger.DeepLinking(true),
 		httpSwagger.DocExpansion("none"),
 		httpSwagger.DomID("swagger-ui"),
@@ -83,7 +83,7 @@ func main() {
 	v1Router := router.PathPrefix("/api/v1/").Subrouter()
 
 	v1Router.HandleFunc("/regions", regionHandler.List)
-	v1Router.HandleFunc("/regions/{regionCode}", regionHandler.ShowRegionByCode)
+	v1Router.HandleFunc("/regions/{regionCode}", regionHandler.ShowByCode)
 
 	v1Router.HandleFunc("/provinces", provinceHandler.List)
 	v1Router.HandleFunc("/provinces/{provinceCode}", provinceHandler.ShowByCode)
@@ -179,5 +179,5 @@ func main() {
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}/barangays", barangayHandler.ListBySubMunicipalityCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}/sub-municipalities/{subMunicipalityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
 
-	log.Fatal(http.ListenAndServe(":6945", router))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("APP_PORT"), router))
 }
