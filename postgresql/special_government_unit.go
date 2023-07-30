@@ -137,7 +137,7 @@ func (store SpecialGovernmentUnit) ListByProvinceCode(code string, opts stores.S
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM special_government_units WHERE province_code = $1 ORDER BY %s %s LIMIT $1 OFFSET $2", opts.Order, opts.Sort)
+	q := fmt.Sprintf("SELECT * FROM special_government_units WHERE province_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
 	rows, err := store.db.Query(q, code, opts.Limit, offset)
 
 	if err != nil {

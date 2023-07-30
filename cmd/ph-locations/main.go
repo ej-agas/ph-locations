@@ -23,8 +23,8 @@ import (
 //	@license.name	GPL v2.0 License
 //	@license.url	https://github.com/learning-cloud-native-go/myapp/blob/master/LICENSE
 
-//	@host		localhost:6945
-//	@basePath	/api/v1
+// @host		localhost:6945
+// @basePath	/api/v1
 func main() {
 	router := mux.NewRouter()
 
@@ -73,8 +73,8 @@ func main() {
 
 	router.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
 	router.HandleFunc("/", handlers.Home)
-	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:6945/swagger/doc.json"), //The url pointing to API definition
+	router.PathPrefix("/docs/").Handler(httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:6945/docs/doc.json"), //The url pointing to API definition
 		httpSwagger.DeepLinking(true),
 		httpSwagger.DocExpansion("none"),
 		httpSwagger.DomID("swagger-ui"),
@@ -82,7 +82,7 @@ func main() {
 
 	v1Router := router.PathPrefix("/api/v1/").Subrouter()
 
-	v1Router.HandleFunc("/regions", regionHandler.ListRegions)
+	v1Router.HandleFunc("/regions", regionHandler.List)
 	v1Router.HandleFunc("/regions/{regionCode}", regionHandler.ShowRegionByCode)
 
 	v1Router.HandleFunc("/provinces", provinceHandler.List)
@@ -142,7 +142,7 @@ func main() {
 	v1Router.HandleFunc("/barangays", barangayHandler.List)
 	v1Router.HandleFunc("/barangays/{barangayCode}", barangayHandler.ShowByCode)
 
-	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionId)
+	v1Router.HandleFunc("/regions/{regionCode}/districts", districtHandler.ListByRegionCode)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}", districtHandler.ShowByCode)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities", cityHandler.ListByDistrictCode)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/cities/{cityCode}", cityHandler.ShowByCode)
@@ -157,7 +157,7 @@ func main() {
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/municipalities/{municipalityCode}/barangays", barangayHandler.ListByMunicipalityCode)
 	v1Router.HandleFunc("/regions/{regionCode}/districts/{districtCode}/municipalities/{municipalityCode}/barangays/{barangayCode}", barangayHandler.ShowByCode)
 
-	v1Router.HandleFunc("/regions/{regionCode}/provinces", provinceHandler.ListByRegionId)
+	v1Router.HandleFunc("/regions/{regionCode}/provinces", provinceHandler.ListByRegionCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}", provinceHandler.ShowByCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities", cityHandler.ListByProvinceCode)
 	v1Router.HandleFunc("/regions/{regionCode}/provinces/{provinceCode}/cities/{cityCode}", cityHandler.ShowByCode)

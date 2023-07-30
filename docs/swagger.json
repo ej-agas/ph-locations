@@ -16,6 +16,913 @@
     "host": "localhost:6945",
     "basePath": "/api/v1",
     "paths": {
+        "/barangays": {
+            "get": {
+                "description": "List Barangays",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "barangays"
+                ],
+                "summary": "List Barangays",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Barangay"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/barangays/{barangayCode}": {
+            "get": {
+                "description": "Show Barangay by Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "barangays"
+                ],
+                "summary": "Show Barangay",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Barangay's PSGC",
+                        "name": "barangayCode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Barangay"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/cities": {
+            "get": {
+                "description": "List Cities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "List Cities",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_City"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/cities/{cityCode}": {
+            "get": {
+                "description": "Show City by Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "Show City",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "City's PSGC",
+                        "name": "cityCode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/cities/{cityCode}/barangays": {
+            "get": {
+                "description": "List Barangays by City's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "barangays"
+                ],
+                "summary": "List Barangays",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "City's PSGC",
+                        "name": "cityCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Barangay"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/cities/{cityCode}/sub-municipalities": {
+            "get": {
+                "description": "List Sub-Municipalities by City's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sub-municipalities"
+                ],
+                "summary": "List Sub-Municipalities",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "City's PSGC",
+                        "name": "cityCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_SubMunicipality"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/districts": {
+            "get": {
+                "description": "List Districts",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "districts"
+                ],
+                "summary": "List Districts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_District"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/districts/{districtCode}": {
+            "get": {
+                "description": "Show District by Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "districts"
+                ],
+                "summary": "Show District",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "District's PSGC",
+                        "name": "districtCode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.District"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/districts/{districtCode}/cities": {
+            "get": {
+                "description": "List Cities by District's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "List Cities",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "District's PSGC",
+                        "name": "districtCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_City"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/districts/{districtCode}/municipalities": {
+            "get": {
+                "description": "List Municipalities by District's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "municipalities"
+                ],
+                "summary": "List Municipalities",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "District's PSGC",
+                        "name": "districtCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Municipality"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/municipalities": {
+            "get": {
+                "description": "List Municipalities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "municipalities"
+                ],
+                "summary": "List Municipalities",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Municipality"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/municipalities/{municipalityCode}": {
+            "get": {
+                "description": "Show Municipality by Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "municipalities"
+                ],
+                "summary": "Show Municipality",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Municipality's PSGC",
+                        "name": "municipalityCode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Municipality"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/municipalities/{municipalityCode}/barangays": {
+            "get": {
+                "description": "List Barangays by Municipality's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "barangays"
+                ],
+                "summary": "List Barangays",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "City's PSGC",
+                        "name": "municipalityCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Barangay"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces": {
+            "get": {
+                "description": "List Provinces",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "provinces"
+                ],
+                "summary": "List Provinces",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Province"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces/{provinceCode}": {
+            "get": {
+                "description": "Show Province by Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "provinces"
+                ],
+                "summary": "Show Province",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Province's PSGC",
+                        "name": "provinceCode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Province"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces/{provinceCode}/cities": {
+            "get": {
+                "description": "List Cities by Province's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "List Cities",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Province's PSGC",
+                        "name": "provinceCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_City"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces/{provinceCode}/municipalities": {
+            "get": {
+                "description": "List Municipalities by Province's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "municipalities"
+                ],
+                "summary": "List Municipalities",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Province's PSGC",
+                        "name": "provinceCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Municipality"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces/{provinceCode}/special-government-units": {
+            "get": {
+                "description": "List Special Government Units by Province's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "special-government-units"
+                ],
+                "summary": "List Special Government Units",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Province's PSGC",
+                        "name": "provinceCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SpecialGovernmentUnit"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/regions": {
             "get": {
                 "description": "List Regions",
@@ -29,25 +936,25 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Order by PSGC, Name, Population",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Sort by ASC (Ascending) DESC (Descending)",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Limit count per page default: 25 per page",
+                        "description": "Limit results per page. (default: 25)",
                         "name": "limit",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Page number",
+                        "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
                     }
@@ -70,7 +977,7 @@
         },
         "/regions/{regionCode}": {
             "get": {
-                "description": "Show Region by Region Code",
+                "description": "Show Region by Philippine Standard Geographic Code (PSGC)",
                 "produces": [
                     "application/json"
                 ],
@@ -102,9 +1009,489 @@
                     }
                 }
             }
+        },
+        "/regions/{regionCode}/districts": {
+            "get": {
+                "description": "List Districts by Region's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "districts"
+                ],
+                "summary": "List Districts By Region Code",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Region's PSGC",
+                        "name": "regionCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_District"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/regions/{regionCode}/provinces": {
+            "get": {
+                "description": "List Provinces by Region's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "provinces"
+                ],
+                "summary": "List Provinces by Region Code",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Region's PSGC",
+                        "name": "regionCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Province"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/special-government-units": {
+            "get": {
+                "description": "List Special Government Units",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "special-government-units"
+                ],
+                "summary": "List Special Government Units",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_SpecialGovernmentUnit"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/special-government-units/{sguCode}": {
+            "get": {
+                "description": "Show Special Government Unit by Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "special-government-units"
+                ],
+                "summary": "Show Special Government Unit",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Special Government Unit PSGC",
+                        "name": "sguCode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SpecialGovernmentUnit"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/special-government-units/{sguCode}/barangays": {
+            "get": {
+                "description": "List Barangays by Special Government Unit's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "barangays"
+                ],
+                "summary": "List Barangays",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Special Government Unit's PSGC",
+                        "name": "sguCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Barangay"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/sub-municipalities": {
+            "get": {
+                "description": "List Sub-Municipalities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sub-municipalities"
+                ],
+                "summary": "List Sub-Municipalities",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_SubMunicipality"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/sub-municipalities/{subMunicipalityCode}": {
+            "get": {
+                "description": "Show Sub-Municipality by Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sub-municipalities"
+                ],
+                "summary": "Show Sub-Municipality",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sub-Municipality's PSGC",
+                        "name": "subMunicipalityCode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SubMunicipality"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/sub-municipalities/{subMunicipalityCode}/barangays": {
+            "get": {
+                "description": "List Barangays by Sub-Municipality's Philippine Standard Geographic Code (PSGC)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "barangays"
+                ],
+                "summary": "List Barangays",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "City's PSGC",
+                        "name": "subMunicipalityCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by id, code (PSGC), Name, Population. (default: id)",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by asc (Ascending) desc (Descending). (default: asc)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Limit results per page. (default: 25)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number. (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ej-agas_ph-locations_stores.Collection-models_Barangay"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseMessage"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "github_com_ej-agas_ph-locations_stores.Collection-models_Barangay": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Barangay"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/stores.PaginationInfo"
+                }
+            }
+        },
+        "github_com_ej-agas_ph-locations_stores.Collection-models_City": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.City"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/stores.PaginationInfo"
+                }
+            }
+        },
+        "github_com_ej-agas_ph-locations_stores.Collection-models_District": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.District"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/stores.PaginationInfo"
+                }
+            }
+        },
+        "github_com_ej-agas_ph-locations_stores.Collection-models_Municipality": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Municipality"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/stores.PaginationInfo"
+                }
+            }
+        },
+        "github_com_ej-agas_ph-locations_stores.Collection-models_Province": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Province"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/stores.PaginationInfo"
+                }
+            }
+        },
         "github_com_ej-agas_ph-locations_stores.Collection-models_Region": {
             "type": "object",
             "properties": {
@@ -119,22 +1506,194 @@
                 }
             }
         },
+        "github_com_ej-agas_ph-locations_stores.Collection-models_SpecialGovernmentUnit": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.SpecialGovernmentUnit"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/stores.PaginationInfo"
+                }
+            }
+        },
+        "github_com_ej-agas_ph-locations_stores.Collection-models_SubMunicipality": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.SubMunicipality"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/stores.PaginationInfo"
+                }
+            }
+        },
         "handlers.ResponseMessage": {
             "type": "object",
             "properties": {
                 "message": {
-                    "description": "Extensions:\nx-order: '1'",
                     "type": "string"
                 },
                 "status_code": {
-                    "description": "error response body\nin:body\nExtensions:\nx-order: '0'",
                     "type": "integer"
+                }
+            }
+        },
+        "models.Barangay": {
+            "type": "object",
+            "properties": {
+                "city_code": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "municipality_code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "integer"
+                },
+                "special_government_unit_code": {
+                    "type": "string"
+                },
+                "sub_municipality_code": {
+                    "type": "string"
+                },
+                "urban_rural": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.City": {
+            "type": "object",
+            "properties": {
+                "city_class": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "district_code": {
+                    "type": "string"
+                },
+                "income_class": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "integer"
+                },
+                "province_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.District": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "integer"
+                },
+                "region_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Municipality": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "district_code": {
+                    "type": "string"
+                },
+                "income_class": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "integer"
+                },
+                "province_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Province": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "income_class": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "integer"
+                },
+                "region_code": {
+                    "type": "string"
                 }
             }
         },
         "models.Region": {
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SpecialGovernmentUnit": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "province_codes": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SubMunicipality": {
+            "type": "object",
+            "properties": {
+                "city_code": {
+                    "type": "string"
+                },
                 "code": {
                     "type": "string"
                 },
