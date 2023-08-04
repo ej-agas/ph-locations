@@ -26,7 +26,8 @@ ARG VERSION
 ENV CGO_ENABLED=0
 ENV DOCKER_BUILDKIT=1
 
-RUN go build -a -tags netgo,osusergo -buildvcs=false -ldflags "-extldflags '-static' -s -w" -ldflags "-X main.version=$VERSION" -o ph_locations_app ./cmd/ph-locations
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    go build -buildvcs=false -ldflags "-X main.version=$VERSION" -o ph_locations_app ./cmd/ph-locations
 
 FROM busybox:musl
 
