@@ -94,7 +94,7 @@ func (store MunicipalityStore) List(opts stores.SearchOpts) (stores.Collection[m
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from municipalities").Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from municipalities").Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -117,6 +117,7 @@ func (store MunicipalityStore) List(opts stores.SearchOpts) (stores.Collection[m
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -134,7 +135,7 @@ func (store MunicipalityStore) ListByProvinceCode(code string, opts stores.Searc
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from municipalities WHERE province_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from municipalities WHERE province_code = $1", code).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -157,6 +158,7 @@ func (store MunicipalityStore) ListByProvinceCode(code string, opts stores.Searc
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -174,7 +176,7 @@ func (store MunicipalityStore) ListByDistrictCode(code string, opts stores.Searc
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from municipalities WHERE district_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from municipalities WHERE district_code = $1", code).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -197,6 +199,7 @@ func (store MunicipalityStore) ListByDistrictCode(code string, opts stores.Searc
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,

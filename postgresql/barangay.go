@@ -96,7 +96,9 @@ func (store BarangayStore) List(opts stores.SearchOpts) (stores.Collection[model
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from barangays").Scan(&totalRows)
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
+
+	err := store.db.QueryRow("SELECT count(*) from barangays WHERE (name ILIKE $1 OR $1 = '%%')", keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -106,8 +108,8 @@ func (store BarangayStore) List(opts stores.SearchOpts) (stores.Collection[model
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM barangays ORDER BY %s %s LIMIT $1 OFFSET $2", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE (name ILIKE $1 OR $1 = '%%') ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -119,6 +121,7 @@ func (store BarangayStore) List(opts stores.SearchOpts) (stores.Collection[model
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -136,7 +139,9 @@ func (store BarangayStore) ListByCityCode(code string, opts stores.SearchOpts) (
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from barangays WHERE city_code = $1", code).Scan(&totalRows)
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
+
+	err := store.db.QueryRow("SELECT count(*) from barangays WHERE city_code = $1 AND (name ILIKE $2 OR $2 = '%%')", code, keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -146,8 +151,8 @@ func (store BarangayStore) ListByCityCode(code string, opts stores.SearchOpts) (
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM barangays WHERE city_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, code, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE city_code = $1 AND (name ILIKE $2 OR $2 = '%%') ORDER BY %s %s LIMIT $3 OFFSET $4", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -159,6 +164,7 @@ func (store BarangayStore) ListByCityCode(code string, opts stores.SearchOpts) (
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -176,7 +182,9 @@ func (store BarangayStore) ListByMunicipalityCode(code string, opts stores.Searc
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from barangays WHERE municipality_code = $1", code).Scan(&totalRows)
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
+
+	err := store.db.QueryRow("SELECT count(*) from barangays WHERE municipality_code = $1 AND (name ILIKE $2 OR $2 = '%%')", code, keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -186,8 +194,8 @@ func (store BarangayStore) ListByMunicipalityCode(code string, opts stores.Searc
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM barangays WHERE municipality_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, code, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE municipality_code = $1 AND (name ILIKE $2 OR $2 = '%%') ORDER BY %s %s LIMIT $3 OFFSET $4", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -199,6 +207,7 @@ func (store BarangayStore) ListByMunicipalityCode(code string, opts stores.Searc
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -216,7 +225,9 @@ func (store BarangayStore) ListBySubMunicipalityCode(code string, opts stores.Se
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from barangays WHERE sub_municipality_code = $1", code).Scan(&totalRows)
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
+
+	err := store.db.QueryRow("SELECT count(*) from barangays WHERE sub_municipality_code = $1 AND (name ILIKE $2 OR $2 = '%%')", code, keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -226,8 +237,8 @@ func (store BarangayStore) ListBySubMunicipalityCode(code string, opts stores.Se
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM barangays WHERE sub_municipality_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, code, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE sub_municipality_code = $1 AND (name ILIKE $2 OR $2 = '%%') ORDER BY %s %s LIMIT $3 OFFSET $4", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -239,6 +250,7 @@ func (store BarangayStore) ListBySubMunicipalityCode(code string, opts stores.Se
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -256,7 +268,9 @@ func (store BarangayStore) ListBySpecialGovernmentUnitCode(code string, opts sto
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from barangays WHERE special_government_unit_code = $1", code).Scan(&totalRows)
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
+
+	err := store.db.QueryRow("SELECT count(*) from barangays WHERE special_government_unit_code = $1 AND (name ILIKE $2 OR $2 = '%%')", code, keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -266,8 +280,8 @@ func (store BarangayStore) ListBySpecialGovernmentUnitCode(code string, opts sto
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM barangays WHERE special_government_unit_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, code, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM barangays WHERE special_government_unit_code = $1 AND (name ILIKE $2 OR $2 = '%%') ORDER BY %s %s LIMIT $3 OFFSET $4", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -279,6 +293,7 @@ func (store BarangayStore) ListBySpecialGovernmentUnitCode(code string, opts sto
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,

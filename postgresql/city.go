@@ -95,7 +95,7 @@ func (store CityStore) List(opts stores.SearchOpts) (stores.Collection[models.Ci
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from cities").Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from cities").Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -118,6 +118,7 @@ func (store CityStore) List(opts stores.SearchOpts) (stores.Collection[models.Ci
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -135,7 +136,7 @@ func (store CityStore) ListByProvinceCode(code string, opts stores.SearchOpts) (
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from cities WHERE province_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from cities WHERE province_code = $1", code).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -158,6 +159,7 @@ func (store CityStore) ListByProvinceCode(code string, opts stores.SearchOpts) (
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -175,7 +177,7 @@ func (store CityStore) ListByDistrictCode(code string, opts stores.SearchOpts) (
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from cities WHERE district_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from cities WHERE district_code = $1", code).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -198,6 +200,7 @@ func (store CityStore) ListByDistrictCode(code string, opts stores.SearchOpts) (
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,

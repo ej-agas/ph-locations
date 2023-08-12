@@ -84,7 +84,7 @@ func (store RegionStore) List(opts stores.SearchOpts) (stores.Collection[models.
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from regions").Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from regions").Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -107,6 +107,7 @@ func (store RegionStore) List(opts stores.SearchOpts) (stores.Collection[models.
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,

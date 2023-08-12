@@ -87,7 +87,7 @@ func (store SpecialGovernmentUnit) List(opts stores.SearchOpts) (stores.Collecti
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from special_government_units").Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from special_government_units").Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -110,6 +110,7 @@ func (store SpecialGovernmentUnit) List(opts stores.SearchOpts) (stores.Collecti
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -127,7 +128,7 @@ func (store SpecialGovernmentUnit) ListByProvinceCode(code string, opts stores.S
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from special_government_units WHERE province_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from special_government_units WHERE province_code = $1", code).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -150,6 +151,7 @@ func (store SpecialGovernmentUnit) ListByProvinceCode(code string, opts stores.S
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,

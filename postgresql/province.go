@@ -89,7 +89,7 @@ func (store ProvinceStore) List(opts stores.SearchOpts) (stores.Collection[model
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from provinces").Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from provinces").Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -112,6 +112,7 @@ func (store ProvinceStore) List(opts stores.SearchOpts) (stores.Collection[model
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -129,7 +130,7 @@ func (store ProvinceStore) ListByRegionCode(code string, opts stores.SearchOpts)
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from provinces WHERE region_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from provinces WHERE region_code = $1", code).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -152,6 +153,7 @@ func (store ProvinceStore) ListByRegionCode(code string, opts stores.SearchOpts)
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,

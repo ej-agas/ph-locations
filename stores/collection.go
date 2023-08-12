@@ -8,6 +8,7 @@ type Collection[T models.Model] struct {
 }
 
 type PaginationInfo struct {
+	Total       int `json:"total"`
 	TotalPages  int `json:"total_pages"`
 	PerPage     int `json:"per_page"`
 	CurrentPage int `json:"current_page"`

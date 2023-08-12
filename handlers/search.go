@@ -26,10 +26,13 @@ func NewSearchOptsFromRequest(r *http.Request) *stores.SearchOpts {
 		order = "id"
 	}
 
+	search := r.URL.Query().Get("q")
+
 	return stores.NewSearchOpts(
 		stores.WithSort(sort),
 		stores.WithOrder(order),
 		stores.WithLimit(limit),
 		stores.WithPage(page),
+		stores.WithSearch(search),
 	)
 }

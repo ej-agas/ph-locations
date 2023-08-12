@@ -3,10 +3,11 @@ package stores
 import "strings"
 
 type SearchOpts struct {
-	Sort  string
-	Order string
-	Limit int
-	Page  int
+	Search string
+	Sort   string
+	Order  string
+	Limit  int
+	Page   int
 }
 
 func NewSearchOpts(opts ...Option) *SearchOpts {
@@ -59,5 +60,11 @@ func WithPage(page int) Option {
 		}
 
 		options.Page = page
+	}
+}
+
+func WithSearch(s string) Option {
+	return func(options *SearchOpts) {
+		options.Search = s
 	}
 }

@@ -92,7 +92,7 @@ func (store SubMunicipalityStore) List(opts stores.SearchOpts) (stores.Collectio
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from sub_municipalities").Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from sub_municipalities").Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -115,6 +115,7 @@ func (store SubMunicipalityStore) List(opts stores.SearchOpts) (stores.Collectio
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
@@ -132,7 +133,7 @@ func (store SubMunicipalityStore) ListByCityCode(code string, opts stores.Search
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
 
-	err := store.db.QueryRow("SELECT count(id) from sub_municipalities WHERE city_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from sub_municipalities WHERE city_code = $1", code).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -155,6 +156,7 @@ func (store SubMunicipalityStore) ListByCityCode(code string, opts stores.Search
 	}
 
 	paginationInfo := stores.PaginationInfo{
+		Total:       int(totalRows),
 		TotalPages:  int(totalPages),
 		PerPage:     opts.Limit,
 		CurrentPage: opts.Page,
