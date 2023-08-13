@@ -130,7 +130,6 @@ func newRegions(rows *sql.Rows, count int) ([]models.Region, error) {
 		if err := rows.Scan(&r.Id, &r.Code, &r.Name, &r.Population); err != nil {
 			return regions, err
 		}
-		fmt.Printf("%#v\n", r)
 		regions = append(regions, r)
 	}
 
