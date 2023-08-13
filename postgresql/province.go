@@ -142,7 +142,7 @@ func (store ProvinceStore) ListByRegionCode(code string, opts stores.SearchOpts)
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM provinces WHERE region_code = $1 (name ILIKE $2 OR $2 = '%%') ORDER BY %s %s LIMIT $3 OFFSET $4", opts.Order, opts.Sort)
+	q := fmt.Sprintf("SELECT * FROM provinces WHERE region_code = $1 AND (name ILIKE $2 OR $2 = '%%') ORDER BY %s %s LIMIT $3 OFFSET $4", opts.Order, opts.Sort)
 	rows, err := store.db.Query(q, code, keyword, opts.Limit, offset)
 
 	if err != nil {

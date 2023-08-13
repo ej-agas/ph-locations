@@ -3,6 +3,7 @@ package postgresql
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/ej-agas/ph-locations/models"
 	"github.com/ej-agas/ph-locations/stores"
@@ -71,7 +72,7 @@ func (store RegionStore) FindByName(name string) (models.Region, error) {
 		return region, nil
 	}
 
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		return region, fmt.Errorf("region with name = %s not found: %s", name, err)
 	}
 
@@ -83,8 +84,9 @@ func (store RegionStore) List(opts stores.SearchOpts) (stores.Collection[models.
 	var totalRows int64
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
 
-	err := store.db.QueryRow("SELECT count(*) from regions").Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) FROM regions WHERE (name ILIKE $1 OR $1 = '%%')", keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -94,8 +96,8 @@ func (store RegionStore) List(opts stores.SearchOpts) (stores.Collection[models.
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM regions ORDER BY %s %s LIMIT $1 OFFSET $2", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM regions WHERE (name ILIKE $1 OR $1 = '%%') ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
