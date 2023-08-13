@@ -93,8 +93,9 @@ func (store MunicipalityStore) List(opts stores.SearchOpts) (stores.Collection[m
 	var totalRows int64
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
 
-	err := store.db.QueryRow("SELECT count(*) from municipalities").Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from municipalities WHERE (name ILIKE $1 OR $1 = '%%')", keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -104,8 +105,8 @@ func (store MunicipalityStore) List(opts stores.SearchOpts) (stores.Collection[m
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM municipalities ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM municipalities WHERE (name ILIKE $1 OR $1 = '%%') ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -134,8 +135,9 @@ func (store MunicipalityStore) ListByProvinceCode(code string, opts stores.Searc
 	var totalRows int64
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
 
-	err := store.db.QueryRow("SELECT count(*) from municipalities WHERE province_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from municipalities WHERE province_code = $1 AND (name ILIKE $2 OR $2 = '%%')", code, keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -145,8 +147,8 @@ func (store MunicipalityStore) ListByProvinceCode(code string, opts stores.Searc
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM municipalities WHERE province_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, code, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM municipalities WHERE province_code = $1 AND (name ILIKE $2 OR $2 = '%%') ORDER BY %s %s LIMIT $3 OFFSET $4", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
@@ -175,8 +177,9 @@ func (store MunicipalityStore) ListByDistrictCode(code string, opts stores.Searc
 	var totalRows int64
 	var totalPages float64
 	offset := (opts.Page - 1) * opts.Limit
+	keyword := fmt.Sprintf("%%%s%%", opts.Search)
 
-	err := store.db.QueryRow("SELECT count(*) from municipalities WHERE district_code = $1", code).Scan(&totalRows)
+	err := store.db.QueryRow("SELECT count(*) from municipalities WHERE district_code = $1 AND (name ILIKE $2 OR $2 = '%%')", code, keyword).Scan(&totalRows)
 	if err != nil {
 		return collection, err
 	}
@@ -186,8 +189,8 @@ func (store MunicipalityStore) ListByDistrictCode(code string, opts stores.Searc
 		totalPages = 1
 	}
 
-	q := fmt.Sprintf("SELECT * FROM municipalities WHERE district_code = $1 ORDER BY %s %s LIMIT $2 OFFSET $3", opts.Order, opts.Sort)
-	rows, err := store.db.Query(q, code, opts.Limit, offset)
+	q := fmt.Sprintf("SELECT * FROM municipalities WHERE district_code = $1 AND (name ILIKE $2 OR $2 = '%%') ORDER BY %s %s LIMIT $3 OFFSET $4", opts.Order, opts.Sort)
+	rows, err := store.db.Query(q, code, keyword, opts.Limit, offset)
 
 	if err != nil {
 		return collection, err
