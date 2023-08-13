@@ -57,6 +57,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by barangay name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -143,6 +149,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by city name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -238,6 +250,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by barangay name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -297,6 +315,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by sub-municipality name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -348,6 +372,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by district name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -442,6 +472,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by city name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -554,6 +590,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by municipality name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -648,6 +690,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by barangay name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -699,6 +747,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by province name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -793,6 +847,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by city name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -912,6 +972,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by special government unit name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -963,6 +1029,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by region name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -1058,6 +1130,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by district name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1117,6 +1195,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by province name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1168,6 +1252,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by special government unit name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -1263,6 +1353,12 @@ const docTemplate = `{
                         "description": "Page number. (default: 1)",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by barangay name",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1314,6 +1410,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by sub-municipality name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -1408,6 +1510,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number. (default: 1)",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by barangay name",
+                        "name": "q",
                         "in": "query"
                     }
                 ],
@@ -1719,6 +1827,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "per_page": {
+                    "type": "integer"
+                },
+                "total": {
                     "type": "integer"
                 },
                 "total_pages": {

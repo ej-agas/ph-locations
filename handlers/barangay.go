@@ -48,6 +48,7 @@ func (handler BarangayHandler) ShowByCode(w http.ResponseWriter, r *http.Request
 //	@param			sort	query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit	query		string	false	"Limit results per page. (default: 25)"
 //	@param			page	query		string	false	"Page number. (default: 1)"
+//	@param			q		query		string	false	"Search by barangay name"
 //	@router			/barangays [get]
 func (handler BarangayHandler) List(w http.ResponseWriter, r *http.Request) {
 	opts := NewSearchOptsFromRequest(r)
@@ -74,6 +75,7 @@ func (handler BarangayHandler) List(w http.ResponseWriter, r *http.Request) {
 //	@param			sort		query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit		query		string	false	"Limit results per page. (default: 25)"
 //	@param			page		query		string	false	"Page number. (default: 1)"
+//	@param			q			query		string	false	"Search by barangay name"
 //	@router			/cities/{cityCode}/barangays [get]
 func (handler BarangayHandler) ListByCityCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -101,6 +103,7 @@ func (handler BarangayHandler) ListByCityCode(w http.ResponseWriter, r *http.Req
 //	@param			sort				query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit				query		string	false	"Limit results per page. (default: 25)"
 //	@param			page				query		string	false	"Page number. (default: 1)"
+//	@param			q					query		string	false	"Search by barangay name"
 //	@router			/municipalities/{municipalityCode}/barangays [get]
 func (handler BarangayHandler) ListByMunicipalityCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -128,6 +131,7 @@ func (handler BarangayHandler) ListByMunicipalityCode(w http.ResponseWriter, r *
 //	@param			sort				query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit				query		string	false	"Limit results per page. (default: 25)"
 //	@param			page				query		string	false	"Page number. (default: 1)"
+//	@param			q					query		string	false	"Search by barangay name"
 //	@router			/sub-municipalities/{subMunicipalityCode}/barangays [get]
 func (handler BarangayHandler) ListBySubMunicipalityCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -155,6 +159,7 @@ func (handler BarangayHandler) ListBySubMunicipalityCode(w http.ResponseWriter, 
 //	@param			sort	query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit	query		string	false	"Limit results per page. (default: 25)"
 //	@param			page	query		string	false	"Page number. (default: 1)"
+//	@param			q		query		string	false	"Search by barangay name"
 //	@router			/special-government-units/{sguCode}/barangays [get]
 func (handler BarangayHandler) ListBySpecialGovernmentUnitCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

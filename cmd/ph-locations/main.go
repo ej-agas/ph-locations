@@ -41,8 +41,8 @@ var Version string
 //	@license.name	GPL v2.0 License
 //	@license.url	https://github.com/learning-cloud-native-go/myapp/blob/master/LICENSE
 
-// @host		localhost:6945
-// @basePath	/api/v1
+//	@host		localhost:6945
+//	@basePath	/api/v1
 func main() {
 	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 

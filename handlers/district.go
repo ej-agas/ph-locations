@@ -48,6 +48,7 @@ func (handler DistrictHandler) ShowByCode(w http.ResponseWriter, r *http.Request
 //	@param			sort	query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit	query		string	false	"Limit results per page. (default: 25)"
 //	@param			page	query		string	false	"Page number. (default: 1)"
+//	@param			q		query		string	false	"Search by district name"
 //	@router			/districts [get]
 func (handler DistrictHandler) List(w http.ResponseWriter, r *http.Request) {
 	opts := NewSearchOptsFromRequest(r)
@@ -74,6 +75,7 @@ func (handler DistrictHandler) List(w http.ResponseWriter, r *http.Request) {
 //	@param			sort		query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit		query		string	false	"Limit results per page. (default: 25)"
 //	@param			page		query		string	false	"Page number. (default: 1)"
+//	@param			q			query		string	false	"Search by district name"
 //	@router			/regions/{regionCode}/districts [get]
 func (handler DistrictHandler) ListByRegionCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

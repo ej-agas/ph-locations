@@ -189,6 +189,8 @@ definitions:
         type: integer
       per_page:
         type: integer
+      total:
+        type: integer
       total_pages:
         type: integer
     type: object
@@ -223,6 +225,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by barangay name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -280,6 +286,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by city name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -343,6 +353,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Search by barangay name
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:
@@ -383,6 +397,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Search by sub-municipality name
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:
@@ -416,6 +434,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by district name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -478,6 +500,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by city name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -553,6 +579,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Search by municipality name
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:
@@ -616,6 +646,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Search by barangay name
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:
@@ -649,6 +683,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by province name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -711,6 +749,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by city name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -792,6 +834,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Search by special government unit name
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:
@@ -825,6 +871,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by region name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -889,6 +939,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Search by district name
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:
@@ -929,6 +983,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Search by province name
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:
@@ -962,6 +1020,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by special government unit name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -1027,6 +1089,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Search by barangay name
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:
@@ -1060,6 +1126,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by sub-municipality name
+        in: query
+        name: q
         type: string
       produces:
       - application/json
@@ -1123,6 +1193,10 @@ paths:
       - description: 'Page number. (default: 1)'
         in: query
         name: page
+        type: string
+      - description: Search by barangay name
+        in: query
+        name: q
         type: string
       produces:
       - application/json

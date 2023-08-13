@@ -48,6 +48,7 @@ func (handler MunicipalityHandler) ShowByCode(w http.ResponseWriter, r *http.Req
 //	@param			sort	query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit	query		string	false	"Limit results per page. (default: 25)"
 //	@param			page	query		string	false	"Page number. (default: 1)"
+//	@param			q		query		string	false	"Search by municipality name"
 //	@router			/municipalities [get]
 func (handler MunicipalityHandler) List(w http.ResponseWriter, r *http.Request) {
 	opts := NewSearchOptsFromRequest(r)

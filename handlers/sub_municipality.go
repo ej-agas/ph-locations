@@ -48,6 +48,7 @@ func (handler SubMunicipalityHandler) ShowByCode(w http.ResponseWriter, r *http.
 //	@param			sort	query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit	query		string	false	"Limit results per page. (default: 25)"
 //	@param			page	query		string	false	"Page number. (default: 1)"
+//	@param			q		query		string	false	"Search by sub-municipality name"
 //	@router			/sub-municipalities [get]
 func (handler SubMunicipalityHandler) List(w http.ResponseWriter, r *http.Request) {
 	opts := NewSearchOptsFromRequest(r)
@@ -74,6 +75,7 @@ func (handler SubMunicipalityHandler) List(w http.ResponseWriter, r *http.Reques
 //	@param			sort		query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit		query		string	false	"Limit results per page. (default: 25)"
 //	@param			page		query		string	false	"Page number. (default: 1)"
+//	@param			q			query		string	false	"Search by sub-municipality name"
 //	@router			/cities/{cityCode}/sub-municipalities [get]
 func (handler SubMunicipalityHandler) ListByCityCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

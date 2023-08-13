@@ -69,6 +69,7 @@ func (handler ProvinceHandler) ShowByCode(w http.ResponseWriter, r *http.Request
 //	@param			sort	query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit	query		string	false	"Limit results per page. (default: 25)"
 //	@param			page	query		string	false	"Page number. (default: 1)"
+//	@param			q		query		string	false	"Search by province name"
 //	@router			/provinces [get]
 func (handler ProvinceHandler) List(w http.ResponseWriter, r *http.Request) {
 	opts := NewSearchOptsFromRequest(r)
@@ -96,6 +97,7 @@ func (handler ProvinceHandler) List(w http.ResponseWriter, r *http.Request) {
 //	@param			sort		query		string	false	"Sort by asc (Ascending) desc (Descending). (default: asc)"
 //	@param			limit		query		string	false	"Limit results per page. (default: 25)"
 //	@param			page		query		string	false	"Page number. (default: 1)"
+//	@param			q			query		string	false	"Search by province name"
 //	@router			/regions/{regionCode}/provinces [get]
 func (handler ProvinceHandler) ListByRegionCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
